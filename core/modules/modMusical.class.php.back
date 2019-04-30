@@ -172,7 +172,7 @@ class modMusical extends DolibarrModules
             'langs'=>'mylangfile@musical',
             'tabname'=>array(MAIN_DB_PREFIX."c_musical_instrument_category"),		// List of tables we want to see into dictonnary editor
             'tablib'=>array("Catégories Instruments"),													// Label of tables
-            'tabsql'=>array('SELECT f.rowid as rowid, f.label as label FROM '.MAIN_DB_PREFIX.'c_musical_instrument_category as f'),	// Request to select fields
+            'tabsql'=>array('SELECT f.rowid as rowid, f.label as label FROM '.MAIN_DB_PREFIX.'c_musical_categories_instruments as f'),	// Request to select fields
             'tabsqlsort'=>array("label ASC"),																					// Sort order
             'tabfield'=>array("rowid","label"),																					// List of fields (result of select to show dictionary)
             'tabfieldvalue'=>array("name","label"),																				// List of fields (list of fields to edit a record)
