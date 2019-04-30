@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2015   Jean-François Ferry     <jfefe@aternatik.fr>
- * Copyright (C) 2019 SuperAdmin
+ * Copyright (C) ---Put here your own copyright and developer email---
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ dol_include_once('/musical/class/instrument.class.php');
 
 
 /**
- * \file    musical/class/api_musical.class.php
+ * \file    class/api_musical.class.php
  * \ingroup musical
  * \brief   File for API management of instrument.
  */

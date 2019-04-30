@@ -17,6 +17,7 @@
 CREATE TABLE llx_musical_instrument(
 	-- BEGIN MODULEBUILDER FIELDS
 	rowid integer AUTO_INCREMENT PRIMARY KEY NOT NULL, 
+	ref varchar(128) NOT NULL, 
 	description text, 
 	date_creation datetime NOT NULL, 
 	tms timestamp NOT NULL, 
@@ -24,8 +25,8 @@ CREATE TABLE llx_musical_instrument(
 	fk_user_modif integer, 
 	import_key varchar(14), 
 	status integer NOT NULL, 
-	name varchar(50) NOT NULL, 
-	serial varchar(50) NOT NULL, 
-	price double(24,2) NOT NULL
+	serial varchar(128) NOT NULL, 
+	name varchar(128) NOT NULL, 
+	price double(24,2)
 	-- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;

@@ -16,8 +16,10 @@
 
 -- BEGIN MODULEBUILDER INDEXES
 ALTER TABLE llx_musical_instrument ADD INDEX idx_musical_instrument_rowid (rowid);
+ALTER TABLE llx_musical_instrument ADD INDEX idx_musical_instrument_ref (ref);
 ALTER TABLE llx_musical_instrument ADD CONSTRAINT llx_musical_instrument_fk_user_creat FOREIGN KEY (fk_user_creat) REFERENCES llx_user(rowid);
 ALTER TABLE llx_musical_instrument ADD INDEX idx_musical_instrument_status (status);
+ALTER TABLE llx_musical_instrument ADD INDEX idx_musical_instrument_serial (serial);
 -- END MODULEBUILDER INDEXES
 
 --ALTER TABLE llx_musical_instrument ADD UNIQUE INDEX uk_musical_instrument_fieldxy(fieldx, fieldy);
