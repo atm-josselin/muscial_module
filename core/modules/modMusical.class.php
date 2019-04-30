@@ -46,7 +46,7 @@ class modMusical extends DolibarrModules
 
 		// Id for module (must be unique).
 		// Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
-		$this->numero = 500100;		// TODO Go on page https://wiki.dolibarr.org/index.php/List_of_modules_id to reserve id number for your module
+		$this->numero = 500100;
 		// Key text used to identify module (for permissions, menus, etc...)
 		$this->rights_class = 'musical';
 
@@ -66,10 +66,10 @@ class modMusical extends DolibarrModules
 		$this->descriptionlong = "Musical description (Long)";
 
 		$this->editor_name = 'Josselin';
-		$this->editor_url = 'https://www.example.com';
+		$this->editor_url = 'None';
 
 		// Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
-		$this->version = '1.0';
+		$this->version = 'development';
 
         //Url to the file with your last numberversion of this module
         //$this->url_last_version = 'http://www.example.com/versionmodule.txt';
@@ -144,7 +144,6 @@ class modMusical extends DolibarrModules
 		// $this->tabs[] = array('data'=>'objecttype:+tabname1:Title1:mylangfile@musical:$user->rights->musical->read:/musical/mynewtab1.php?id=__ID__');  					// To add a new tab identified by code tabname1
         // $this->tabs[] = array('data'=>'objecttype:+tabname2:SUBSTITUTION_Title2:mylangfile@musical:$user->rights->othermodule->read:/musical/mynewtab2.php?id=__ID__',  	// To add another new tab identified by code tabname2. Label will be result of calling all substitution functions on 'Title2' key.
         // $this->tabs[] = array('data'=>'objecttype:-tabname:NU:conditiontoremove');                                                     										// To remove an existing tab identified by code tabname
-        //
         // Where objecttype can be
 		// 'categories_x'	  to add a tab in category view (replace 'x' by type of category (0=product, 1=supplier, 2=customer, 3=member)
 		// 'contact'          to add a tab in contact view
@@ -172,11 +171,11 @@ class modMusical extends DolibarrModules
             'langs'=>'mylangfile@musical',
             'tabname'=>array(MAIN_DB_PREFIX."c_musical_instrument_category"),		                                                // List of tables we want to see into dictonnary editor
             'tablib'=>array("Catégories Instruments"),						                                                        // Label of tables
-            'tabsql'=>array('SELECT label, rowid, active FROM '.MAIN_DB_PREFIX.'c_musical_instrument_category'), // Request to select fields
+            'tabsql'=>array('SELECT label, rowid, active FROM '.MAIN_DB_PREFIX.'c_musical_instrument_category'),                    // Request to select fields
             'tabsqlsort'=>array("label ASC"),														                                // Sort order
             'tabfield'=>array("label","rowid"),														                                // List of fields (result of select to show dictionary)
             'tabfieldvalue'=>array("label"),														                                // List of fields (list of fields to edit a record)
-            'tabfieldinsert'=>array("label"),														                        // List of fields (list of fields for insert)
+            'tabfieldinsert'=>array("label"),														                                // List of fields (list of fields for insert)
             'tabrowid'=>array("rowid"),																                                // Name of columns with primary key (try to always name it 'rowid')
             'tabcond'=>array($conf->musical->enabled)											                                	// Condition to show each dictionary
         );
@@ -186,7 +185,7 @@ class modMusical extends DolibarrModules
         $this->boxes = array(
         	0=>array('file'=>'musicalwidget1.php@musical','note'=>'Widget provided by Musical','enabledbydefaulton'=>'Home'),
         	//1=>array('file'=>'musicalwidget2.php@musical','note'=>'Widget provided by Musical'),
-        	//2=>array('file'=>'musicalwidget3.php@musical','note'=>'Widget provided by Musical')
+            //2=>array('file'=>'musicalwidget3.php@musical','note'=>'Widget provided by Musical')
         );
 
 
@@ -239,7 +238,7 @@ class modMusical extends DolibarrModules
 								'leftmenu'=>'',
 								'url'=>'/musical/musicalindex.php',
 								'langs'=>'musical@musical',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-								'position'=>1000+$r,
+								'position'=>70+$r,
 								'enabled'=>'$conf->musical->enabled',	// Define condition to show or hide menu entry. Use '$conf->musical->enabled' if entry must be visible if module is enabled.
 								'perms'=>'1',			                // Use 'perms'=>'$user->rights->musical->level1->level2' if you want your menu with a permission rules
 								'target'=>'',
@@ -247,32 +246,7 @@ class modMusical extends DolibarrModules
 
 		/* END MODULEBUILDER TOPMENU */
 
-		/* BEGIN MODULEBUILDER LEFTMENU INSTRUMENT
-		$this->menu[$r++]=array(	'fk_menu'=>'fk_mainmenu=musical',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-								'type'=>'left',			                // This is a Left menu entry
-								'titre'=>'List instrument',
-								'mainmenu'=>'musical',
-								'leftmenu'=>'musical_instrument_list',
-								'url'=>'/musical/instrument_list.php',
-								'langs'=>'musical@musical',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-								'position'=>1000+$r,
-								'enabled'=>'$conf->musical->enabled',  // Define condition to show or hide menu entry. Use '$conf->musical->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-								'perms'=>'1',			                // Use 'perms'=>'$user->rights->musical->level1->level2' if you want your menu with a permission rules
-								'target'=>'',
-								'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
-		$this->menu[$r++]=array(	'fk_menu'=>'fk_mainmenu=musical,fk_leftmenu=musical',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-								'type'=>'left',			                // This is a Left menu entry
-								'titre'=>'New instrument',
-								'mainmenu'=>'musical',
-								'leftmenu'=>'musical_instrument_new',
-								'url'=>'/musical/instrument_page.php?action=create',
-								'langs'=>'musical@musical',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-								'position'=>1000+$r,
-								'enabled'=>'$conf->musical->enabled',  // Define condition to show or hide menu entry. Use '$conf->musical->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-								'perms'=>'1',			                // Use 'perms'=>'$user->rights->musical->level1->level2' if you want your menu with a permission rules
-								'target'=>'',
-								'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
-		*/
+		/* BEGIN MODULEBUILDER LEFTMENU INSTRUMENT */
 
 		$this->menu[$r++]=array(
                 				'fk_menu'=>'fk_mainmenu=musical',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
@@ -324,6 +298,10 @@ class modMusical extends DolibarrModules
 		$this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('instrument').')';
 		$r++; */
 		/* END MODULEBUILDER EXPORT INSTRUMENT */
+	}
+
+	public function get_category(){
+        $reslut ="";
 	}
 
 	/**
