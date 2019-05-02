@@ -192,7 +192,33 @@ if ($action == 'create')
 	// Other attributes
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_add.tpl.php';
 
-	print '</table>'."\n";
+
+	// --- Champ catégorie
+    print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired"> Category </td> ';
+    $resql=$db->query("Select * from llx_c_musical_instrument_category");
+    if ($resql)
+    {
+        $num = $db->num_rows($resql);
+        $i = 0;
+        if ($num)
+        {
+            print '<td><select class="flat" name="category">';
+            print '<option value="0"> </option>';
+            while ($i < $num)
+            {
+                $obj = $db->fetch_object($resql);
+                if ($obj)
+                {
+                    print '<option value="' . $obj->rowid . '">' . $obj->label . '</option>';
+                }
+                $i++;
+            }
+            print '</select></td></tr>';
+        }
+    }
+    // ---
+
+    print '</table>'."\n";
 
 	dol_fiche_end();
 
@@ -209,7 +235,6 @@ if ($action == 'create')
 if (($id || $ref) && $action == 'edit')
 {
 	print load_fiche_titre($langs->trans("instrument"));
-
 	print '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
     print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 	print '<input type="hidden" name="action" value="update">';
@@ -225,6 +250,37 @@ if (($id || $ref) && $action == 'edit')
 
 	// Other attributes
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_edit.tpl.php';
+
+    // --- Champ catégorie
+    print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired"> Category </td> ';
+    $currentObj=$db->query("Select * from llx_musical_instrument_category where fk_rowInstrument='".$id."'");
+    $currentCateg = $db->fetch_object($currentObj);
+    $resql=$db->query("Select * from llx_c_musical_instrument_category");
+    if ($resql)
+    {
+        $num = $db->num_rows($resql);
+        $i = 0;
+        if ($num)
+        {
+            print '<td><select class="flat" name="category">';
+            while ($i < $num)
+            {
+                $obj = $db->fetch_object($resql);
+                if ($obj)
+                {
+                    if ($currentCateg->fk_rowCategory == $obj->rowid){
+                        print '<option selected value="' . $obj->rowid . '">' . $obj->label . '</option>';
+                    }
+                    else {
+                        print '<option value="' . $obj->rowid . '">' . $obj->label . '</option>';
+                    }
+                }
+                $i++;
+            }
+            print '</select></td></tr>';
+        }
+    }
+    // ---
 
 	print '</table>';
 
@@ -347,6 +403,22 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	// Other attributes
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php';
 
+    // --- Champ catégorie
+
+
+    $currentObj=$db->query("Select * from llx_c_musical_instrument_category INNER JOIN llx_musical_instrument_category ON rowid=fk_rowCategory where fk_rowInstrument='".$id."'");
+    $currentCateg = $db->fetch_object($currentObj);
+    if ($currentCateg)
+    {
+        $num = $db->num_rows($resql);
+        if ($num)
+        {
+            print '<tr> <td class="titlefieldcreate"> Category </td><td>'. $currentCateg->label.'</td></tr>';
+        }
+        
+    }
+    // ---
+
 	print '</table>';
 	print '</div>';
 	print '</div>';
@@ -384,19 +456,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     			print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;socid=' . $object->socid . '&amp;action=clone&amp;object=order">' . $langs->trans("ToClone") . '</a></div>';
     		}
 
-    		/*
-    		if ($user->rights->musical->write)
-    		{
-    			if ($object->status == 1)
-    		 	{
-    		 		print '<a class="butActionDelete" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=disable">'.$langs->trans("Disable").'</a>'."\n";
-    		 	}
-    		 	else
-    		 	{
-    		 		print '<a class="butAction" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=enable">'.$langs->trans("Enable").'</a>'."\n";
-    		 	}
-    		}
-    		*/
 
     		if ($user->rights->musical->delete)
     		{
@@ -453,9 +512,9 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	}
 
 	//Select mail models is same action as presend
-	/*
-	 if (GETPOST('modelselected')) $action = 'presend';
 
+	 if (GETPOST('modelselected')) $action = 'presend';
+    /*
 	 // Presend form
 	 $modelmail='inventory';
 	 $defaulttopic='InformationMessage';
@@ -463,7 +522,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	 $trackid = 'stockinv'.$object->id;
 
 	 include DOL_DOCUMENT_ROOT.'/core/tpl/card_presend.tpl.php';
-	 */
+    */
 }
 
 // End of page
