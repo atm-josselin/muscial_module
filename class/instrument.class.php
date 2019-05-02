@@ -185,8 +185,97 @@ class instrument extends CommonObject
 	 */
 	public function create(User $user, $notrigger = false)
 	{
-		return $this->createCommon($user, $notrigger);
-	}
+        $res = $this->insertCategory($user, $notrigger);
+        if ($res != 1) return $res;
+        $error = 0;
+        global $conf;
+        $sql = "INSERT INTO llx_musical_instrument (ref,description,date_creation,fk_user_creat,status,serial,name,price) VALUES('".$this->ref."','".$this->description."',. NOW() .,'".$user."','".$this->status."','".$this->serial."','".$this->name."','".$this->price."');";
+        $this->db->begin();
+
+        if (! $error)
+        {
+            $res = $this->db->query($sql);
+            if ($res===false)
+            {
+                $error++;
+                $this->errors[] = $this->db->lasterror();
+            }
+        }
+
+        // Update extrafield
+        if (! $error && empty($conf->global->MAIN_EXTRAFIELDS_DISABLED) && is_array($this->array_options) && count($this->array_options)>0)
+        {
+            $result=$this->insertExtraFields();
+            if ($result < 0)
+            {
+                $error++;
+            }
+        }
+
+        // Triggers
+        if (! $error && ! $notrigger)
+        {
+            // Call triggers
+            $result=$this->call_trigger(strtoupper(get_class($this)).'_MODIFY',$user);
+            if ($result < 0) { $error++; } //Do also here what you must do to rollback action if trigger fail
+            // End call triggers
+        }
+
+        // Commit or rollback
+        if ($error) {
+            $this->db->rollback();
+            return -1;
+        } else {
+            $this->db->commit();
+            return 1;
+        }
+    }
+
+
+    public function insertCategory(User $user, $notrigger = false){
+        $error = 0;
+        global $conf;
+        $sql = "UPDATE llx_musical_instrument_category SET fk_rowCategory='".$_POST['category']."' WHERE fk_rowInstrument='".$this->id."';";
+        $this->db->begin();
+
+        if (! $error)
+        {
+            $res = $this->db->query($sql);
+            if ($res===false)
+            {
+                $error++;
+                $this->errors[] = $this->db->lasterror();
+            }
+        }
+
+        // Update extrafield
+        if (! $error && empty($conf->global->MAIN_EXTRAFIELDS_DISABLED) && is_array($this->array_options) && count($this->array_options)>0)
+        {
+            $result=$this->insertExtraFields();
+            if ($result < 0)
+            {
+                $error++;
+            }
+        }
+
+        // Triggers
+        if (! $error && ! $notrigger)
+        {
+            // Call triggers
+            $result=$this->call_trigger(strtoupper(get_class($this)).'_MODIFY',$user);
+            if ($result < 0) { $error++; } //Do also here what you must do to rollback action if trigger fail
+            // End call triggers
+        }
+
+        // Commit or rollback
+        if ($error) {
+            $this->db->rollback();
+            return -1;
+        } else {
+            $this->db->commit();
+            return 1;
+        }
+    }
 
 	/**
 	 * Clone and object into another one
@@ -366,11 +455,100 @@ class instrument extends CommonObject
 	 * @param  bool $notrigger false=launch triggers after, true=disable triggers
 	 * @return int             <0 if KO, >0 if OK
 	 */
+
 	public function update(User $user, $notrigger = false)
 	{
-		return $this->updateCommon($user, $notrigger);
+	    $res = $this->updateCategory($user, $notrigger);
+	    if ($res != 1) return $res;
+	    $error = 0;
+        global $conf;
+        $sql = "UPDATE llx_musical_instrument SET ref='".$this->ref."', description='".$this->description."', status='".$this->status."', serial ='".$this->serial."', name='".$this->name."', price='".$this->price."' WHERE rowid='".$this->id."';";
+        $this->db->begin();
+
+        if (! $error)
+        {
+            $res = $this->db->query($sql);
+            if ($res===false)
+            {
+                $error++;
+                $this->errors[] = $this->db->lasterror();
+            }
+        }
+
+        // Update extrafield
+        if (! $error && empty($conf->global->MAIN_EXTRAFIELDS_DISABLED) && is_array($this->array_options) && count($this->array_options)>0)
+        {
+            $result=$this->insertExtraFields();
+            if ($result < 0)
+            {
+                $error++;
+            }
+        }
+
+        // Triggers
+        if (! $error && ! $notrigger)
+        {
+            // Call triggers
+            $result=$this->call_trigger(strtoupper(get_class($this)).'_MODIFY',$user);
+            if ($result < 0) { $error++; } //Do also here what you must do to rollback action if trigger fail
+            // End call triggers
+        }
+
+        // Commit or rollback
+        if ($error) {
+            $this->db->rollback();
+            return -1;
+        } else {
+            $this->db->commit();
+            return 1;
+        }
 	}
 
+
+	public function updateCategory(User $user, $notrigger = false){
+        $error = 0;
+        global $conf;
+        $sql = "UPDATE llx_musical_instrument_category SET fk_rowCategory='".$_POST['category']."' WHERE fk_rowInstrument='".$this->id."';";
+        $this->db->begin();
+
+        if (! $error)
+        {
+            $res = $this->db->query($sql);
+            if ($res===false)
+            {
+                $error++;
+                $this->errors[] = $this->db->lasterror();
+            }
+        }
+
+        // Update extrafield
+        if (! $error && empty($conf->global->MAIN_EXTRAFIELDS_DISABLED) && is_array($this->array_options) && count($this->array_options)>0)
+        {
+            $result=$this->insertExtraFields();
+            if ($result < 0)
+            {
+                $error++;
+            }
+        }
+
+        // Triggers
+        if (! $error && ! $notrigger)
+        {
+            // Call triggers
+            $result=$this->call_trigger(strtoupper(get_class($this)).'_MODIFY',$user);
+            if ($result < 0) { $error++; } //Do also here what you must do to rollback action if trigger fail
+            // End call triggers
+        }
+
+        // Commit or rollback
+        if ($error) {
+            $this->db->rollback();
+            return -1;
+        } else {
+            $this->db->commit();
+            return 1;
+        }
+    }
 	/**
 	 * Delete object in database
 	 *
@@ -380,9 +558,95 @@ class instrument extends CommonObject
 	 */
 	public function delete(User $user, $notrigger = false)
 	{
-		return $this->deleteCommon($user, $notrigger);
-		//return $this->deleteCommon($user, $notrigger, 1);
+	    $res = $this->deleteLinksCategory($user, $notrigger);
+        $error = 0;
+        global $conf;
+        $sql = "DELETE FROM llx_musical_instrument WHERE rowid='".$this->id."'";
+        $this->db->begin();
+
+        if (! $error)
+        {
+            $res = $this->db->query($sql);
+            if ($res===false)
+            {
+                $error++;
+                $this->errors[] = $this->db->lasterror();
+            }
+        }
+
+        // Update extrafield
+        if (! $error && empty($conf->global->MAIN_EXTRAFIELDS_DISABLED) && is_array($this->array_options) && count($this->array_options)>0)
+        {
+            $result=$this->insertExtraFields();
+            if ($result < 0)
+            {
+                $error++;
+            }
+        }
+
+        // Triggers
+        if (! $error && ! $notrigger)
+        {
+            // Call triggers
+            $result=$this->call_trigger(strtoupper(get_class($this)).'_MODIFY',$user);
+            if ($result < 0) { $error++; } //Do also here what you must do to rollback action if trigger fail
+            // End call triggers
+        }
+
+        // Commit or rollback
+        if ($error) {
+            $this->db->rollback();
+            return -1;
+        } else {
+            $this->db->commit();
+            return 1;
+        }
 	}
+    public function deleteLinksCategory(User $user, $notrigger = false)
+    {
+        $error = 0;
+        global $conf;
+        $sql = "DELETE FROM llx_musical_instrument_category WHERE fk_rowInstrument='".$this->id."'";
+        $this->db->begin();
+
+        if (! $error)
+        {
+            $res = $this->db->query($sql);
+            if ($res===false)
+            {
+                $error++;
+                $this->errors[] = $this->db->lasterror();
+            }
+        }
+
+        // Update extrafield
+        if (! $error && empty($conf->global->MAIN_EXTRAFIELDS_DISABLED) && is_array($this->array_options) && count($this->array_options)>0)
+        {
+            $result=$this->insertExtraFields();
+            if ($result < 0)
+            {
+                $error++;
+            }
+        }
+
+        // Triggers
+        if (! $error && ! $notrigger)
+        {
+            // Call triggers
+            $result=$this->call_trigger(strtoupper(get_class($this)).'_MODIFY',$user);
+            if ($result < 0) { $error++; } //Do also here what you must do to rollback action if trigger fail
+            // End call triggers
+        }
+
+        // Commit or rollback
+        if ($error) {
+            $this->db->rollback();
+            return -1;
+        } else {
+            $this->db->commit();
+            return 1;
+        }
+    }
 
 	/**
 	 *  Return a link to the object card (with optionaly the picto)
