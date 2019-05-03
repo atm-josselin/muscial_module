@@ -525,13 +525,28 @@ class instrument extends CommonObject
         global $conf;
         $category = $_POST['category'];
         $this->db->begin();
-        $resql=$this->db->query("SELECT * FROM llx_musical_instrument_category WHERE fk_rowInstrument='".$this->id."';");
-        if ($this->db->num_rows($resql) != 1){
-            $sql = $sql = "INSERT INTO llx_musical_instrument_category(fk_rowCategory, fk_rowInstrument) VALUES ('".$category."','".$this->id."');";
+        // Check if there is already a catagory in the Database
+        $currentCategory=$this->db->query("SELECT * FROM llx_musical_instrument_category WHERE fk_rowInstrument='".$this->id."';");
+        $checkCategory = $this->db->num_rows($currentCategory);
+        // 1 -> yes 0 -> no
+        if($checkCategory == 0){ //There is no category with this instrument
+            if ($category == 0){ // We don't want to add one
+                $this->db->commit();
+                return 1;
+            }
+            else { // We want to add a category
+                $sql = "INSERT INTO llx_musical_instrument_category(fk_rowCategory, fk_rowInstrument) VALUES ('".$category."','".$this->id."');";
+            }
         }
-        else {
-            $sql = "UPDATE llx_musical_instrument_category SET fk_rowCategory='".$category."' WHERE fk_rowInstrument='".$this->id."';";
+        else { // There is a category in the database
+            if ($category == 0){ // We want to remove the category
+                $sql = "DELETE FROM llx_musical_instrument_category WHERE fk_rowInstrument='".$this->id."';";
+            }
+            else { // We want to change the category
+                $sql = "UPDATE llx_musical_instrument_category SET fk_rowCategory='".$category."' WHERE fk_rowInstrument='".$this->id."';";
+            }
         }
+
         if (! $error)
         {
             $res = $this->db->query($sql);
