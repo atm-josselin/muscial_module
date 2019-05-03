@@ -40,7 +40,7 @@ global $langs, $user;
 
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
-require_once '../lib/musical.lib.php';
+//require_once '../lib/musical.lib.php';
 //require_once "../class/myclass.class.php";
 
 // Translations
@@ -74,13 +74,8 @@ $linkback = '<a href="'.($backtopage?$backtopage:DOL_URL_ROOT.'/admin/modules.ph
 
 print load_fiche_titre($langs->trans($page_name), $linkback, 'object_musical@musical');
 
-// Configuration header
-$head = musicalAdminPrepareHead();
-dol_fiche_head($head, 'settings', '', -1, "musical@musical");
-
 // Setup page goes here
 echo $langs->trans("MusicalSetupPage").'<br><br>';
-
 
 if ($action == 'edit')
 {
@@ -90,6 +85,8 @@ if ($action == 'edit')
 
 	print '<table class="noborder" width="100%">';
 	print '<tr class="liste_titre"><td class="titlefield">'.$langs->trans("Parameter").'</td><td>'.$langs->trans("Value").'</td></tr>';
+
+
 
 	foreach($arrayofparameters as $key => $val)
 	{
