@@ -261,26 +261,47 @@ if (($id || $ref) && $action == 'edit')
     {
         $num = $db->num_rows($resql);
         $i = 0;
-        if ($num)
-        {
-            print '<td><select class="flat" name="category">';
-            while ($i < $num)
+        print '<td><select class="flat" name="category">';
+        print '<option selected value=""> </option>';
+        if ($currentCateg == null){
+            if ($num)
             {
-                $obj = $db->fetch_object($resql);
-                if ($obj)
+                while ($i < $num)
                 {
-                    if ($currentCateg->fk_rowCategory == $obj->rowid){
-                        print '<option selected value="' . $obj->rowid . '">' . $obj->label . '</option>';
-                    }
-                    else {
+                    $obj = $db->fetch_object($resql);
+                    if ($obj)
+                    {
                         print '<option value="' . $obj->rowid . '">' . $obj->label . '</option>';
                     }
+                    $i++;
                 }
-                $i++;
+
+                print '</select></td></tr>';
             }
-            print '</select></td></tr>';
+
         }
+        else {
+            if ($num)
+            {
+                while ($i < $num)
+                {
+                    $obj = $db->fetch_object($resql);
+                    if ($obj)
+                    {
+                        if ($currentCateg->fk_rowCategory == $obj->rowid){
+                            print '<option selected value="' . $obj->rowid . '">' . $obj->label . '</option>';
+                        }
+                        else {
+                            print '<option value="' . $obj->rowid . '">' . $obj->label . '</option>';
+                        }
+                    }
+                    $i++;
+                }
+            }
+        }
+        print '</select></td></tr>';
     }
+    else print 'Aucune Catégorie (Aller dans dictionnaires)';
     // ---
 
 	print '</table>';
@@ -408,15 +429,12 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     // --- Champ catégorie
     $currentObj=$db->query("Select * from llx_c_musical_instrument_category INNER JOIN llx_musical_instrument_category ON rowid=fk_rowCategory where fk_rowInstrument='".$id."'");
     $currentCateg = $db->fetch_object($currentObj);
+    print '<tr> <td class="titlefieldcreate"> Category </td><td>';
     if ($currentCateg)
     {
-        $num = $db->num_rows($resql);
-        if ($num)
-        {
-            print '<tr> <td class="titlefieldcreate"> Category </td><td>'. $currentCateg->label.'</td></tr>';
-        }
-        
+        if ($currentCateg->rowid != 0) print $currentCateg->label;
     }
+    print '</td></tr>';
     // ---
 
 	print '</table>';

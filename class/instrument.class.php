@@ -185,11 +185,19 @@ class instrument extends CommonObject
 	 */
 	public function create(User $user, $notrigger = false)
 	{
-        $res = $this->insertCategory($user, $notrigger);
-        if ($res != 1) return $res;
+        $category = $_POST['category'];
         $error = 0;
         global $conf;
-        $sql = "INSERT INTO llx_musical_instrument (ref,description,date_creation,fk_user_creat,status,serial,name,price) VALUES('".$this->ref."','".$this->description."',. NOW() .,'".$user."','".$this->status."','".$this->serial."','".$this->name."','".$this->price."');";
+        $now = $this->db->idate(date('y-m-j H:i:s'));
+        $sql = "INSERT INTO llx_musical_instrument (ref,description,date_creation,fk_user_creat,status,serial,name,price) VALUES('"
+            .$this->ref."','"
+            .$this->description."','"
+            . $now ."','"
+            .$user->id."','"
+            .$this->status."','"
+            .$this->serial."','"
+            .$this->name."','"
+            .$this->price."');";
         $this->db->begin();
 
         if (! $error)
@@ -226,16 +234,22 @@ class instrument extends CommonObject
             $this->db->rollback();
             return -1;
         } else {
+            $id = $this->db->last_insert_id(MAIN_DB_PREFIX."musical_instrument");
             $this->db->commit();
-            return 1;
+            if ($category != 0)
+                $res = $this->insertCategory($user, $notrigger, $id);
+            return $res;
         }
     }
 
 
-    public function insertCategory(User $user, $notrigger = false){
+    public function insertCategory(User $user, $notrigger = false,$id){
         $error = 0;
         global $conf;
-        $sql = "UPDATE llx_musical_instrument_category SET fk_rowCategory='".$_POST['category']."' WHERE fk_rowInstrument='".$this->id."';";
+        $category = $_POST['category'];
+        var_dump($_POST['category']);
+        var_dump($id);
+        $sql = "INSERT INTO llx_musical_instrument_category(fk_rowCategory, fk_rowInstrument) VALUES ('".$category."','".$id."');";
         $this->db->begin();
 
         if (! $error)
@@ -459,10 +473,11 @@ class instrument extends CommonObject
 	public function update(User $user, $notrigger = false)
 	{
 	    $res = $this->updateCategory($user, $notrigger);
+        $now = $this->db->idate(date('j-m-y H:i:s'));
 	    if ($res != 1) return $res;
 	    $error = 0;
         global $conf;
-        $sql = "UPDATE llx_musical_instrument SET ref='".$this->ref."', description='".$this->description."', status='".$this->status."', serial ='".$this->serial."', name='".$this->name."', price='".$this->price."' WHERE rowid='".$this->id."';";
+        $sql = "UPDATE llx_musical_instrument SET tms='".$now."', fk_user_modif='". $user->id ."', ref='".$this->ref."', description='".$this->description."', status='".$this->status."', serial ='".$this->serial."', name='".$this->name."', price='".$this->price."' WHERE rowid='".$this->id."';";
         $this->db->begin();
 
         if (! $error)
@@ -508,9 +523,15 @@ class instrument extends CommonObject
 	public function updateCategory(User $user, $notrigger = false){
         $error = 0;
         global $conf;
-        $sql = "UPDATE llx_musical_instrument_category SET fk_rowCategory='".$_POST['category']."' WHERE fk_rowInstrument='".$this->id."';";
+        $category = $_POST['category'];
         $this->db->begin();
-
+        $resql=$this->db->query("SELECT * FROM llx_musical_instrument_category WHERE fk_rowInstrument='".$this->id."';");
+        if ($this->db->num_rows($resql) != 1){
+            $sql = $sql = "INSERT INTO llx_musical_instrument_category(fk_rowCategory, fk_rowInstrument) VALUES ('".$category."','".$this->id."');";
+        }
+        else {
+            $sql = "UPDATE llx_musical_instrument_category SET fk_rowCategory='".$category."' WHERE fk_rowInstrument='".$this->id."';";
+        }
         if (! $error)
         {
             $res = $this->db->query($sql);
