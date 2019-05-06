@@ -1,4 +1,4 @@
--- Copyright (C) 2019 SuperAdmin
+-- Copyright (C) ---Put here your own copyright and developer email---
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -14,11 +14,9 @@
 -- along with this program.  If not, see http://www.gnu.org/licenses/.
 
 
--- BEGIN MODULEBUILDER INDEXES
-ALTER TABLE llx_musical_instrument ADD INDEX idx_fieldobject (fieldobject);
--- END MODULEBUILDER INDEXES
-
---ALTER TABLE llx_musical_myobject ADD UNIQUE INDEX uk_musical_myobject_fieldxy(fieldx, fieldy);
-
---ALTER TABLE llx_musical_myobject ADD CONSTRAINT llx_musical_myobject_fk_field FOREIGN KEY (fk_field) REFERENCES llx_musical_myotherobject(rowid);
-
+CREATE TABLE llx_c_musical_instrument_category(
+    rowid integer AUTO_INCREMENT not null primary key,
+    label varchar(255),
+    defaultPrice DOUBLE(24,2),
+    active tinyint(4)
+) ENGINE=innodb;

@@ -1,6 +1,0 @@
-*CREATE TABLE llx_c_instrument_category(
-	rowid integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-	label varchar(50),
-	active tinyint(4) DEFAULT 1 NOT NULL,
-	module varchar(32)
-);

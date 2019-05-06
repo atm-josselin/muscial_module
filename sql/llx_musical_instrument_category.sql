@@ -13,28 +13,10 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see http://www.gnu.org/licenses/.
 
-
-CREATE TABLE llx_musical_instrument(
-	-- BEGIN MODULEBUILDER FIELDS
-	rowid integer AUTO_INCREMENT PRIMARY KEY NOT NULL, 
-	ref varchar(128) NOT NULL, 
-	description text, 
-	date_creation datetime NOT NULL, 
-	tms timestamp NOT NULL, 
-	fk_user_creat integer NOT NULL, 
-	fk_user_modif integer, 
-	import_key varchar(14), 
-	status integer NOT NULL, 
-	serial varchar(128) NOT NULL, 
-	name varchar(128) NOT NULL, 
-	price double(24,2)
-	-- END MODULEBUILDER FIELDS
-) ENGINE=innodb;
-
 CREATE TABLE llx_musical_instrument_category (
     fk_rowid integer AUTO_INCREMENT not null primary key,
     fk_rowInstrument integer not null,
     fk_rowCategory integer not null,
 	foreign key(fk_rowInstrument) REFERENCES llx_musical_instrument(rowid),
     foreign key(fk_rowCategory) REFERENCES llx_c_musical_instrument_category(rowid)
-);
+) ENGINE=innodb;

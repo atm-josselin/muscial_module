@@ -128,6 +128,7 @@ if (empty($reshook))
 	$triggermodname = 'MUSICAL_INSTRUMENT_MODIFY';	// Name of trigger action code to execute when we modify record
 
 	// Actions cancel, add, update, delete or clone
+    $backtopage = 'http://localhost/dolibarr/htdocs/custom/musical/instrument_card.php?id=__ID__';
 	include DOL_DOCUMENT_ROOT.'/core/actions_addupdatedelete.inc.php';
 
 	// Actions when linking object each other
@@ -180,7 +181,7 @@ if ($action == 'create')
 
 	// --- Champ catégorie
     print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired"> Category </td> ';
-    $resql=$db->query("Select * from llx_c_musical_instrument_category");
+    $resql=$db->query("Select * from llx_c_musical_instrument_category WHERE active = '1'");
     if ($resql)
     {
         $num = $db->num_rows($resql);
@@ -231,7 +232,7 @@ if (($id || $ref) && $action == 'edit')
 	print '<table class="border centpercent">'."\n";
 
 	// Common attributes
-	include DOL_DOCUMENT_ROOT . '/core/tpl/commonfields_edit.tpl.php';
+    include'tpl/commonfields_edit.tpl.php';
 
 	// Other attributes
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_edit.tpl.php';
@@ -240,7 +241,7 @@ if (($id || $ref) && $action == 'edit')
     print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired"> Category </td> ';
     $currentObj=$db->query("Select * from llx_musical_instrument_category where fk_rowInstrument='".$id."'");
     $currentCateg = $db->fetch_object($currentObj);
-    $resql=$db->query("Select * from llx_c_musical_instrument_category");
+    $resql=$db->query("Select * from llx_c_musical_instrument_category WHERE active = '1'");
     if ($resql)
     {
         $num = $db->num_rows($resql);
@@ -354,49 +355,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	// ------------------------------------------------------------
 	$linkback = '<a href="' .dol_buildpath('/musical/instrument_list.php',1) . '?restore_lastsearch_values=1' . (! empty($socid) ? '&socid=' . $socid : '') . '">' . $langs->trans("BackToList") . '</a>';
 
-	$morehtmlref='<div class="refidno">';
-	/*
-	// Ref bis
-	$morehtmlref.=$form->editfieldkey("RefBis", 'ref_client', $object->ref_client, $object, $user->rights->musical->creer, 'string', '', 0, 1);
-	$morehtmlref.=$form->editfieldval("RefBis", 'ref_client', $object->ref_client, $object, $user->rights->musical->creer, 'string', '', null, null, '', 1);
-	// Thirdparty
-	$morehtmlref.='<br>'.$langs->trans('ThirdParty') . ' : ' . $soc->getNomUrl(1);
-	// Project
-	if (! empty($conf->projet->enabled))
-	{
-	    $langs->load("projects");
-	    $morehtmlref.='<br>'.$langs->trans('Project') . ' ';
-	    if ($user->rights->musical->write)
-	    {
-	        if ($action != 'classify')
-	            $morehtmlref.='<a href="' . $_SERVER['PHP_SELF'] . '?action=classify&amp;id=' . $object->id . '">' . img_edit($langs->transnoentitiesnoconv('SetProject')) . '</a> : ';
-            if ($action == 'classify') {
-                //$morehtmlref.=$form->form_project($_SERVER['PHP_SELF'] . '?id=' . $object->id, $object->socid, $object->fk_project, 'projectid', 0, 0, 1, 1);
-                $morehtmlref.='<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$object->id.'">';
-                $morehtmlref.='<input type="hidden" name="action" value="classin">';
-                $morehtmlref.='<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-                $morehtmlref.=$formproject->select_projects($object->socid, $object->fk_project, 'projectid', 0, 0, 1, 0, 1, 0, 0, '', 1);
-                $morehtmlref.='<input type="submit" class="button valignmiddle" value="'.$langs->trans("Modify").'">';
-                $morehtmlref.='</form>';
-            } else {
-                $morehtmlref.=$form->form_project($_SERVER['PHP_SELF'] . '?id=' . $object->id, $object->socid, $object->fk_project, 'none', 0, 0, 0, 1);
-	        }
-	    } else {
-	        if (! empty($object->fk_project)) {
-	            $proj = new Project($db);
-	            $proj->fetch($object->fk_project);
-	            $morehtmlref.=$proj->getNomUrl();
-	        } else {
-	            $morehtmlref.='';
-	        }
-	    }
-	}
-	*/
-	$morehtmlref.='</div>';
-
-
-	dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref);
-
+	dol_banner_tab($object, 'name', $linkback, 1, 'name', 'name', $morehtmlref);
 
 	print '<div class="fichecenter">';
 	print '<div class="fichehalfleft">';
@@ -405,7 +364,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
 	// Common attributes
 	//$keyforbreak='fieldkeytoswithonsecondcolumn';
-	include DOL_DOCUMENT_ROOT . '/core/tpl/commonfields_view.tpl.php';
+	include 'tpl/instrument_view.tpl.php';
 
 	// Other attributes
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php';

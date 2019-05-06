@@ -40,8 +40,7 @@ global $langs, $user;
 
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
-//require_once '../lib/musical.lib.php';
-//require_once "../class/myclass.class.php";
+require_once DOL_DOCUMENT_ROOT . "/core/actions_setmoduleoptions.inc.php";
 
 // Translations
 $langs->loadLangs(array("admin", "musical@musical"));
@@ -52,6 +51,11 @@ if (! $user->admin) accessforbidden();
 // Parameters
 $action = GETPOST('action', 'alpha');
 $backtopage = GETPOST('backtopage', 'alpha');
+
+$arrayofparameters=array(
+    'MUSICAL_DEFAULT_PRICE'=>array('css'=>'minwidth200','enabled'=>0)
+);
+
 
 /*
  * Actions
@@ -74,6 +78,10 @@ $linkback = '<a href="'.($backtopage?$backtopage:DOL_URL_ROOT.'/admin/modules.ph
 
 print load_fiche_titre($langs->trans($page_name), $linkback, 'object_musical@musical');
 
+// Configuration header
+//$head = mymoduleAdminPrepareHead();
+//dol_fiche_head($head, 'settings', '', -1, "musical@musicalr");
+
 // Setup page goes here
 echo $langs->trans("MusicalSetupPage").'<br><br>';
 
@@ -85,8 +93,6 @@ if ($action == 'edit')
 
 	print '<table class="noborder" width="100%">';
 	print '<tr class="liste_titre"><td class="titlefield">'.$langs->trans("Parameter").'</td><td>'.$langs->trans("Value").'</td></tr>';
-
-
 
 	foreach($arrayofparameters as $key => $val)
 	{
@@ -113,7 +119,7 @@ else
 		foreach($arrayofparameters as $key => $val)
 		{
 			print '<tr class="oddeven"><td>';
-			print $form->textwithpicto($langs->trans($key),$langs->trans($key.'Tooltip'));
+			print $form->textwithpicto($langs->trans($key),$langs->trans($key));
 			print '</td><td>' . $conf->global->$key . '</td></tr>';
 		}
 
@@ -135,4 +141,6 @@ dol_fiche_end();
 
 llxFooter();
 $db->close();
+
+
 

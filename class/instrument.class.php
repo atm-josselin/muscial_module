@@ -189,10 +189,23 @@ class instrument extends CommonObject
         $error = 0;
         global $conf;
         $now = $this->db->idate(date('y-m-j H:i:s'));
+
+        // Auto Price if it's empty
+        if (((int)$this->price) == 0){
+            $currentCategory=$this->db->query("SELECT * FROM llx_c_musical_instrument_category WHERE rowid='".$category."';");
+            // No price and no category
+            if ($this->db->num_rows($currentCategory) == 0){
+                //TODO Get default PRice
+            }
+            else {
+                $this->price = $this->db->fetch_object($currentCategory)->defaultPrice;
+            }
+        }
+
         $sql = "INSERT INTO llx_musical_instrument (ref,description,date_creation,fk_user_creat,status,serial,name,price) VALUES('"
             .$this->ref."','"
             .$this->description."','"
-            . $now ."','"
+            .$now ."','"
             .$user->id."','"
             .$this->status."','"
             .$this->serial."','"
@@ -236,9 +249,13 @@ class instrument extends CommonObject
         } else {
             $id = $this->db->last_insert_id(MAIN_DB_PREFIX."musical_instrument");
             $this->db->commit();
-            if ($category != 0)
+            if ($category != 0){
                 $res = $this->insertCategory($user, $notrigger, $id);
-            return $res;
+                if ($res == 1){
+                    return $id;
+                }
+            }
+            return -1;
         }
     }
 
@@ -481,11 +498,16 @@ class instrument extends CommonObject
         // Auto Price if it's empty
         if (((int)$this->price) == 0){
             $currentCategory=$this->db->query("SELECT * FROM llx_c_musical_instrument_category WHERE rowid='".$category."';");
-            $this->price = $this->db->fetch_object($currentCategory)->defaultPrice;
+            // No price and no category
+            if ($this->db->num_rows($currentCategory) == 0){
+                //TODO Get default PRice
+            }
+            else {
+                $this->price = $this->db->fetch_object($currentCategory)->defaultPrice;
+            }
         }
 
         $sql = "UPDATE llx_musical_instrument SET tms='".$now."', fk_user_modif='". $user->id ."', ref='".$this->ref."', description='".$this->description."', status='".$this->status."', serial ='".$this->serial."', name='".$this->name."', price='".$this->price."' WHERE rowid='".$this->id."';";
-
 
         if (! $error)
         {
@@ -522,7 +544,7 @@ class instrument extends CommonObject
             return -1;
         } else {
             $this->db->commit();
-            return 1;
+            return $this->id;
         }
 	}
 

@@ -30,11 +30,3 @@ CREATE TABLE llx_musical_instrument(
 	price double(24,2)
 	-- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
-
-CREATE TABLE llx_musical_instrument_category (
-    fk_rowid integer AUTO_INCREMENT not null primary key,
-    fk_rowInstrument integer not null,
-    fk_rowCategory integer not null,
-	foreign key(fk_rowInstrument) REFERENCES llx_musical_instrument(rowid),
-    foreign key(fk_rowCategory) REFERENCES llx_c_musical_instrument_category(rowid)
-);
