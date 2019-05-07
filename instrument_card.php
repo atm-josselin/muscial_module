@@ -128,7 +128,7 @@ if (empty($reshook))
 	$triggermodname = 'MUSICAL_INSTRUMENT_MODIFY';	// Name of trigger action code to execute when we modify record
 
 	// Actions cancel, add, update, delete or clone
-    $backtopage = 'http://localhost/dolibarr/htdocs/custom/musical/instrument_card.php?id=__ID__';
+    $backtopage =  '';
 	include DOL_DOCUMENT_ROOT.'/core/actions_addupdatedelete.inc.php';
 
 	// Actions when linking object each other
@@ -398,9 +398,10 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
     	if (empty($reshook))
     	{
+    	    /*
     	    // Send
             print '<a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=presend&mode=init#formmailbeforetitle">' . $langs->trans('SendMail') . '</a>'."\n";
-
+            */
             // Modify
     		if ($user->rights->musical->write)
     		{
@@ -410,13 +411,13 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     		{
     			print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans('Modify').'</a>'."\n";
     		}
-
+    		/*
     		// Clone
     		if ($user->rights->musical->write)
     		{
     			print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER['PHP_SELF'] . '?id=' . $object->id . '&amp;socid=' . $object->socid . '&amp;action=clone&amp;object=order">' . $langs->trans("ToClone") . '</a></div>';
     		}
-
+           */
 
     		if ($user->rights->musical->delete)
     		{
@@ -431,59 +432,23 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	}
 
 
-	// Select mail models is same action as presend
-	if (GETPOST('modelselected')) {
-		$action = 'presend';
-	}
-
-	if ($action != 'presend')
-	{
-	    print '<div class="fichecenter"><div class="fichehalfleft">';
-	    print '<a name="builddoc"></a>'; // ancre
-
-	    // Documents
-	    /*$objref = dol_sanitizeFileName($object->ref);
-	    $relativepath = $comref . '/' . $comref . '.pdf';
-	    $filedir = $conf->musical->dir_output . '/' . $objref;
-	    $urlsource = $_SERVER["PHP_SELF"] . "?id=" . $object->id;
-	    $genallowed = $user->rights->musical->read;	// If you can read, you can build the PDF to read content
-	    $delallowed = $user->rights->musical->create;	// If you can create/edit, you can remove a file on card
-	    print $formfile->showdocuments('musical', $objref, $filedir, $urlsource, $genallowed, $delallowed, $object->modelpdf, 1, 0, 0, 28, 0, '', '', '', $soc->default_lang);
-		*/
-
-	    // Show links to link elements
-	    $linktoelem = $form->showLinkToObjectBlock($object, null, array('instrument'));
-	    $somethingshown = $form->showLinkedObjectBlock($object, $linktoelem);
-
-
-	    print '</div><div class="fichehalfright"><div class="ficheaddleft">';
-
-	    $MAXEVENT = 10;
-
-	    $morehtmlright = '<a href="'.dol_buildpath('/musical/instrument_info.php', 1).'?id='.$object->id.'">';
-	    $morehtmlright.= $langs->trans("SeeAll");
-	    $morehtmlright.= '</a>';
-
-	    // List of actions on element
-	    include_once DOL_DOCUMENT_ROOT . '/core/class/html.formactions.class.php';
-	    $formactions = new FormActions($db);
-	    $somethingshown = $formactions->showactions($object, 'instrument', $socid, 1, '', $MAXEVENT, '', $morehtmlright);
-
-	    print '</div></div></div>';
-	}
-
-	//Select mail models is same action as presend
-
-	 if (GETPOST('modelselected')) $action = 'presend';
-    /*
-	 // Presend form
-	 $modelmail='inventory';
-	 $defaulttopic='InformationMessage';
-	 $diroutput = $conf->product->dir_output.'/inventory';
-	 $trackid = 'stockinv'.$object->id;
-
-	 include DOL_DOCUMENT_ROOT.'/core/tpl/card_presend.tpl.php';
-    */
+//	// Select mail models is same action as presend
+//	if (GETPOST('modelselected')) {
+//		$action = 'presend';
+//	}
+//
+//	//Select mail models is same action as presend
+//
+//	 if (GETPOST('modelselected')) $action = 'presend';
+//    /*
+//	 // Presend form
+//	 $modelmail='inventory';
+//	 $defaulttopic='InformationMessage';
+//	 $diroutput = $conf->product->dir_output.'/inventory';
+//	 $trackid = 'stockinv'.$object->id;
+//
+//	 include DOL_DOCUMENT_ROOT.'/core/tpl/card_presend.tpl.php';
+//    */
 }
 
 // End of page

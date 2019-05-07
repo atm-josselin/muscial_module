@@ -195,7 +195,7 @@ class instrument extends CommonObject
             $currentCategory=$this->db->query("SELECT * FROM llx_c_musical_instrument_category WHERE rowid='".$category."';");
             // No price and no category
             if ($this->db->num_rows($currentCategory) == 0){
-                //TODO Get default PRice
+                $this->price = $conf->global->MUSICAL_DEFAULT_PRICE;
             }
             else {
                 $this->price = $this->db->fetch_object($currentCategory)->defaultPrice;
@@ -461,9 +461,7 @@ class instrument extends CommonObject
 				$record = new self($this->db);
 
 				$record->id = $obj->rowid;
-				// TODO Get other fields
 
-				//var_dump($record->id);
 				$records[$record->id] = $record;
 			}
 			$this->db->free($resql);
@@ -500,7 +498,7 @@ class instrument extends CommonObject
             $currentCategory=$this->db->query("SELECT * FROM llx_c_musical_instrument_category WHERE rowid='".$category."';");
             // No price and no category
             if ($this->db->num_rows($currentCategory) == 0){
-                //TODO Get default PRice
+                $this->price = $conf->global->MUSICAL_DEFAULT_PRICE;
             }
             else {
                 $this->price = $this->db->fetch_object($currentCategory)->defaultPrice;

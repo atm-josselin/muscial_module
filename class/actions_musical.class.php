@@ -84,7 +84,7 @@ class ActionsMusical
 	}
 
 	/**
-	 * Overloading the doActions function : replacing the parent's function with the one below
+	 * addMoreActionsButtons function : Hook on product
 	 *
 	 * @param   array           $parameters     Hook metadatas (context, etc...)
 	 * @param   CommonObject    $object         The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
@@ -92,29 +92,13 @@ class ActionsMusical
 	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
 	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
 	 */
-	public function doActions($parameters, &$object, &$action, $hookmanager)
-	{
-		global $conf, $user, $langs;
-
-		$error = 0; // Error counter
-
-        /* print_r($parameters); print_r($object); echo "action: " . $action; */
-	    if (in_array($parameters['currentcontext'], array('somecontext1','somecontext2')))	    // do something only for the context 'somecontext1' or 'somecontext2'
-	    {
-			// Do what you want here...
-			// You can for example call global vars like $fieldstosearchall to overwrite them, or update database depending on $action and $_POST values.
-		}
-
-		if (! $error) {
-			$this->results = array('myreturn' => 999);
-			$this->resprints = 'A text to show';
-			return 0; // or return 1 to replace standard code
-		} else {
-			$this->errors[] = 'Error message';
-			return -1;
-		}
-	}
-
+	public function addMoreActionsButtons($parameters, &$object, &$action, $hookmanager){
+	    print '<div class="inline-block divButAction"><a class="butAction" ';
+	    print 'href="/dolibarr/htdocs/custom/musical/instrument_card.php?action=create';
+	    print '&ref='.$object->ref.'&price='.$object->price.'&description='.$object->description.'&name='.$object->label.'&status='.$object->status;
+        print '">Créer un instrument</a></div>';
+	    return 0;
+    }
 
 	/**
 	 * Overloading the doActions function : replacing the parent's function with the one below
