@@ -51,3 +51,14 @@ MyPageName = My page name
 #
 MyWidget = My widget
 MyWidgetDescription = My widget description
+
+
+#
+NoCategory = No category available (go to dictionaries configuration)
+Serial = Serial Number
+
+instrumentList = Instruments List
+instrumentNew = New Instrument
+price = Price
+
+MUSICAL_DEFAULT_PRICE = Default price

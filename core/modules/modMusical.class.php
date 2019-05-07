@@ -69,7 +69,7 @@ class modMusical extends DolibarrModules
 		$this->editor_url = 'None';
 
 		// Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
-		$this->version = '1.0.0';
+		$this->version = '2.3.2';
 
         //Url to the file with your last numberversion of this module
         //$this->url_last_version = 'http://www.example.com/versionmodule.txt';
@@ -85,7 +85,7 @@ class modMusical extends DolibarrModules
 		    'triggers' => 1,                                 	// Set this to 1 if module has its own trigger directory (core/triggers)
 			'login' => 0,                                    	// Set this to 1 if module has its own login method file (core/login)
 			'substitutions' => 1,                            	// Set this to 1 if module has its own substitution function file (core/substitutions)
-			'menus' => 0,                                    	// Set this to 1 if module has its own menus handler directory (core/menus)
+			'menus' => 1,                                    	// Set this to 1 if module has its own menus handler directory (core/menus)
 			'theme' => 0,                                    	// Set this to 1 if module has its own theme directory (theme)
 		    'tpl' => 0,                                      	// Set this to 1 if module overwrite template dir (core/tpl)
 			'barcode' => 0,                                  	// Set this to 1 if module has its own barcode directory (core/modules/barcode)
@@ -251,7 +251,7 @@ class modMusical extends DolibarrModules
 		$this->menu[$r++]=array(
                 				'fk_menu'=>'fk_mainmenu=musical',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
 								'type'=>'left',			                // This is a Left menu entry
-								'titre'=>'List instrument',
+								'titre'=>$langs->trans('instrumentList'),
 								'mainmenu'=>'musical',
 								'leftmenu'=>'musical_instrument',
 								'url'=>'/musical/instrument_list.php',
@@ -264,7 +264,7 @@ class modMusical extends DolibarrModules
 		$this->menu[$r++]=array(
                 				'fk_menu'=>'fk_mainmenu=musical,fk_leftmenu=musical_instrument',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
 								'type'=>'left',			                // This is a Left menu entry
-								'titre'=>'New instrument',
+								'titre'=>$langs->trans('instrumentNew'),
 								'mainmenu'=>'musical',
 								'leftmenu'=>'musical_instrument',
 								'url'=>'/musical/instrument_card.php?action=create',
@@ -327,7 +327,7 @@ class modMusical extends DolibarrModules
 		//$result4=$extrafields->addExtraField('myattr4', "New Attr 4 label", 'select',  1,  3, 'thirdparty',   0, 1, '', array('options'=>array('code1'=>'Val1','code2'=>'Val2','code3'=>'Val3')), 1 '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
 		//$result5=$extrafields->addExtraField('myattr5', "New Attr 5 label", 'text',    1, 10, 'user',         0, 0, '', '', 1, '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
 
-		$sql = array();
+		$sql=array("INSERT INTO ".MAIN_DB_PREFIX."document_model (nom, type, entity) VALUES('azur_mention','musical','1')");
 
 		return $this->_init($sql, $options);
 	}
@@ -343,6 +343,7 @@ class modMusical extends DolibarrModules
 	public function remove($options = '')
 	{
 		$sql = array();
+        $sql=array("DELETE FROM ".MAIN_DB_PREFIX."document_model WHERE nom='azur_mention'");
 
 		return $this->_remove($sql, $options);
 	}

@@ -46,3 +46,14 @@ MyPageName = Nom de ma page
 #
 MyWidget = Mon widget
 MyWidgetDescription = Description de mon widget
+
+
+#
+NoCategory = Aucune catégorie définie (Se rendre dans dicitonnaires)
+Serial = Numéro de série
+
+instrumentList = Liste des instruments
+instrumentNew = Nouvel instrument
+price = Prix
+
+MUSICAL_DEFAULT_PRICE = Prix par défaut (lorsque aucune catégorie n'est sélectionnée)

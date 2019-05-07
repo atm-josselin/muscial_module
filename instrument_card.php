@@ -113,22 +113,20 @@ include DOL_DOCUMENT_ROOT.'/core/actions_fetchobject.inc.php';  // Must be inclu
 $parameters=array();
 $reshook=$hookmanager->executeHooks('doActions',$parameters,$object,$action);    // Note that $action and $object may have been modified by some hooks
 if ($reshook < 0) setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
-
 if (empty($reshook))
 {
 	$error=0;
 
 	$permissiontoadd = $user->rights->musical->write;
 	$permissiontodelete = $user->rights->musical->delete || ($permissiontoadd && $object->status == 0);
-    	$backurlforlist = dol_buildpath('/musical/instrument_list.php',1);
+    	$backurlforlist = dol_buildpath('/musical/instrument_card.php?id=__ID__',1);
 	if (empty($backtopage)) {
 	    if (empty($id)) $backtopage = $backurlforlist;
-	    else $backtopage = dol_buildpath('/musical/instrument_card.php',1).($id > 0 ? $id : '__ID__');
+	    else $backtopage = dol_buildpath('/musical/instrument_card.php?id=',1).($id > 0 ? $id : '__ID__');
     	}
 	$triggermodname = 'MUSICAL_INSTRUMENT_MODIFY';	// Name of trigger action code to execute when we modify record
 
 	// Actions cancel, add, update, delete or clone
-    $backtopage =  '';
 	include DOL_DOCUMENT_ROOT.'/core/actions_addupdatedelete.inc.php';
 
 	// Actions when linking object each other
@@ -143,9 +141,6 @@ if (empty($reshook))
 	$trackid='instrument'.$object->id;
 	include DOL_DOCUMENT_ROOT.'/core/actions_sendmails.inc.php';
 }
-
-
-
 
 /*
  * View
@@ -180,9 +175,9 @@ if ($action == 'create')
 
 
 	// --- Champ catégorie
-    print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired"> Category </td> ';
+    print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired"> '.$langs->trans('Category').' </td> ';
     $resql=$db->query("Select * from llx_c_musical_instrument_category WHERE active = '1'");
-    if ($resql)
+    if ($resql->num_rows > 1)
     {
         $num = $db->num_rows($resql);
         $i = 0;
@@ -202,7 +197,9 @@ if ($action == 'create')
             print '</select></td></tr>';
         }
     }
-    // ---
+    else {
+        print '<td>'.$langs->trans('NoCategory').'</td></tr>';
+    }
 
     print '</table>'."\n";
 
@@ -238,11 +235,11 @@ if (($id || $ref) && $action == 'edit')
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_edit.tpl.php';
 
     // --- Champ catégorie
-    print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired"> Category </td> ';
+    print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired">'.$langs->trans('Category').'</td> ';
     $currentObj=$db->query("Select * from llx_musical_instrument_category where fk_rowInstrument='".$id."'");
     $currentCateg = $db->fetch_object($currentObj);
     $resql=$db->query("Select * from llx_c_musical_instrument_category WHERE active = '1'");
-    if ($resql)
+    if ($resql->num_rows > 1)
     {
         $num = $db->num_rows($resql);
         $i = 0;
@@ -286,9 +283,9 @@ if (($id || $ref) && $action == 'edit')
         }
         print '</select></td></tr>';
     }
-    else print 'Aucune Catégorie (Aller dans dictionnaires)';
-    // ---
-
+    else {
+        print '<td>'.$langs->trans('NoCategory').'</td></tr>';
+    }
 	print '</table>';
 
 	dol_fiche_end();
@@ -372,7 +369,7 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     // --- Champ catégorie
     $currentObj=$db->query("Select * from llx_c_musical_instrument_category INNER JOIN llx_musical_instrument_category ON rowid=fk_rowCategory where fk_rowInstrument='".$id."'");
     $currentCateg = $db->fetch_object($currentObj);
-    print '<tr> <td class="titlefieldcreate"> Category </td><td>';
+    print '<tr> <td class="titlefieldcreate"> '.$langs->trans('Category').' </td><td>';
     if ($currentCateg)
     {
         if ($currentCateg->rowid != 0) print $currentCateg->label;
@@ -398,10 +395,10 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
     	if (empty($reshook))
     	{
-    	    /*
+
     	    // Send
             print '<a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=presend&mode=init#formmailbeforetitle">' . $langs->trans('SendMail') . '</a>'."\n";
-            */
+
             // Modify
     		if ($user->rights->musical->write)
     		{
@@ -432,23 +429,23 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	}
 
 
-//	// Select mail models is same action as presend
-//	if (GETPOST('modelselected')) {
-//		$action = 'presend';
-//	}
-//
-//	//Select mail models is same action as presend
-//
-//	 if (GETPOST('modelselected')) $action = 'presend';
-//    /*
-//	 // Presend form
-//	 $modelmail='inventory';
-//	 $defaulttopic='InformationMessage';
-//	 $diroutput = $conf->product->dir_output.'/inventory';
-//	 $trackid = 'stockinv'.$object->id;
-//
-//	 include DOL_DOCUMENT_ROOT.'/core/tpl/card_presend.tpl.php';
-//    */
+	// Select mail models is same action as presend
+	if (GETPOST('modelselected')) {
+		$action = 'presend';
+	}
+
+	//Select mail models is same action as presend
+
+	 if (GETPOST('modelselected')) $action = 'presend';
+
+	 // Presend form
+	 $modelmail='inventory';
+	 $defaulttopic='InformationMessage';
+	 $diroutput = $conf->product->dir_output.'/inventory';
+	 $trackid = 'stockinv'.$object->id;
+
+	 include DOL_DOCUMENT_ROOT.'/core/tpl/card_presend.tpl.php';
+
 }
 
 // End of page

@@ -255,7 +255,7 @@ class instrument extends CommonObject
                     return $id;
                 }
             }
-            return -1;
+            return $id;
         }
     }
 
