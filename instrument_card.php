@@ -74,8 +74,7 @@ $cancel     = GETPOST('cancel', 'aZ09');
 $contextpage= GETPOST('contextpage','aZ')?GETPOST('contextpage','aZ'):'instrumentcard';   // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 $category   = GETPOST('category', 'alpha');
-
-
+$product  = GETPOST('product', 'int');
 // Initialize technical objects
 $object=new instrument($db);
 $extrafields = new ExtraFields($db);
@@ -162,6 +161,7 @@ if ($action == 'create')
 	print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 	print '<input type="hidden" name="action" value="add">';
 	print '<input type="hidden" name="backtopage" value="'.$backtopage.'">';
+    print '<input type="hidden" name="product" value="'.$product.'">';
 
 	dol_fiche_head(array(), '');
 
@@ -319,25 +319,6 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 		$formquestion = array();
 		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('Cloneinstrument'), $langs->trans('ConfirmCloneinstrument', $object->ref), 'confirm_clone', $formquestion, 'yes', 1);
 	}
-
-	// Confirmation of action xxxx
-	if ($action == 'xxx')
-	{
-        /*
-		$formquestion=array();
-
-		$forcecombo=0;
-		if ($conf->browser->name == 'ie') $forcecombo = 1;	// There is a bug in IE10 that make combo inside popup crazy
-	    $formquestion = array(
-	        'text' => $langs->trans("ConfirmClone"),
-	        array('type' => 'checkbox', 'name' => 'clone_content', 'label' => $langs->trans("CloneMainAttributes"), 'value' => 1),
-	        array('type' => 'checkbox', 'name' => 'update_prices', 'label' => $langs->trans("PuttingPricesUpToDate"), 'value' => 1),
-	        array('type' => 'other',    'name' => 'idwarehouse',   'label' => $langs->trans("SelectWarehouseForStockDecrease"), 'value' => $formproduct->selectWarehouses(GETPOST('idwarehouse')?GETPOST('idwarehouse'):'ifone', 'idwarehouse', '', 1, 0, 0, '', 0, $forcecombo))
-        );
-        */
-	    $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('XXX'), $text, 'confirm_xxx', $formquestion, 0, 1, 220);
-	}
-
 	// Call Hook formConfirm
 	$parameters = array('lineid' => $lineid);
 	$reshook = $hookmanager->executeHooks('formConfirm', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
@@ -360,22 +341,10 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 	print '<table class="border centpercent">'."\n";
 
 	// Common attributes
-	//$keyforbreak='fieldkeytoswithonsecondcolumn';
 	include 'tpl/instrument_view.tpl.php';
 
 	// Other attributes
-	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php';
-
-    // --- Champ catégorie
-    $currentObj=$db->query("Select * from llx_c_musical_instrument_category INNER JOIN llx_musical_instrument_category ON rowid=fk_rowCategory where fk_rowInstrument='".$id."'");
-    $currentCateg = $db->fetch_object($currentObj);
-    print '<tr> <td class="titlefieldcreate"> '.$langs->trans('Category').' </td><td>';
-    if ($currentCateg)
-    {
-        if ($currentCateg->rowid != 0) print $currentCateg->label;
-    }
-    print '</td></tr>';
-    // ---
+	include 'tpl/extrafields_view.tpl.php';
 
 	print '</table>';
 	print '</div>';
@@ -395,10 +364,10 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
     	if (empty($reshook))
     	{
-
+            /*
     	    // Send
             print '<a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&action=presend&mode=init#formmailbeforetitle">' . $langs->trans('SendMail') . '</a>'."\n";
-
+            */
             // Modify
     		if ($user->rights->musical->write)
     		{

@@ -92,7 +92,7 @@ class modMusical extends DolibarrModules
 			'models' => 0,                                   	// Set this to 1 if module has its own models directory (core/modules/xxx)
 			'css' => array('/musical/css/musical.css.php'),	// Set this to relative path of css file if module has its own css file
 	 		'js' => array('/musical/js/musical.js.php'),          // Set this to relative path of js file if module must load a js on all pages
-            'hooks' => array('productcard'),  // Set here all hooks context you want to support
+            'hooks' => array('productcard', 'propalcard'),  // Set here all hooks context you want to support
 			'moduleforexternal' => 0					// Set this to 1 if feature of module are opened to external users
         );
 
@@ -326,9 +326,8 @@ class modMusical extends DolibarrModules
 		//$result3=$extrafields->addExtraField('myattr3', "New Attr 3 label", 'varchar', 1, 10, 'bank_account', 0, 0, '', '', 1, '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
 		//$result4=$extrafields->addExtraField('myattr4', "New Attr 4 label", 'select',  1,  3, 'thirdparty',   0, 1, '', array('options'=>array('code1'=>'Val1','code2'=>'Val2','code3'=>'Val3')), 1 '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
 		//$result5=$extrafields->addExtraField('myattr5', "New Attr 5 label", 'text',    1, 10, 'user',         0, 0, '', '', 1, '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
-
-		$sql=array("INSERT INTO ".MAIN_DB_PREFIX."document_model (nom, type, entity) VALUES('azur_mention','musical','1')");
-
+        $sql = array();
+		//$sql=array("INSERT INTO ".MAIN_DB_PREFIX."document_model (nom, type, entity) VALUES('azur_mention','musical','1')");
 		return $this->_init($sql, $options);
 	}
 
@@ -343,7 +342,7 @@ class modMusical extends DolibarrModules
 	public function remove($options = '')
 	{
 		$sql = array();
-        $sql=array("DELETE FROM ".MAIN_DB_PREFIX."document_model WHERE nom='azur_mention'");
+        //$sql=array("DELETE FROM ".MAIN_DB_PREFIX."document_model WHERE nom='azur_mention'");
 
 		return $this->_remove($sql, $options);
 	}

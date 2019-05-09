@@ -55,5 +55,6 @@ Serial = Numéro de série
 instrumentList = Liste des instruments
 instrumentNew = Nouvel instrument
 price = Prix
+ProductLinked = Produit d'origine
 
 MUSICAL_DEFAULT_PRICE = Prix par défaut (lorsque aucune catégorie n'est sélectionnée)

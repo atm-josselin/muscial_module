@@ -89,6 +89,7 @@ class instrument extends CommonObject
 		'tms' => array('type'=>'timestamp', 'label'=>'DateModification', 'enabled'=>1, 'visible'=>-2, 'position'=>501, 'notnull'=>1,),
 		'fk_user_creat' => array('type'=>'integer', 'label'=>'UserAuthor', 'enabled'=>1, 'visible'=>-2, 'position'=>510, 'notnull'=>1, 'foreignkey'=>'llx_user.rowid',),
 		'fk_user_modif' => array('type'=>'integer', 'label'=>'UserModif', 'enabled'=>1, 'visible'=>-2, 'position'=>511, 'notnull'=>-1,),
+        'fk_product' => array('type'=>'integer', 'label'=>'product', 'enabled'=>1, 'visible'=>0, 'position'=>2000, 'notnull'=>-1,),
 		'import_key' => array('type'=>'varchar(14)', 'label'=>'ImportId', 'enabled'=>1, 'visible'=>-2, 'position'=>1000, 'notnull'=>-1,),
 		'status' => array('type'=>'integer', 'label'=>'Status', 'enabled'=>1, 'visible'=>1, 'position'=>1000, 'notnull'=>1, 'index'=>1, 'arrayofkeyval'=>array('0'=>'Brouillon', '1'=>'Actif', '-1'=>'Annul&eacute;')),
 		'serial' => array('type'=>'varchar(128)', 'label'=>'Serial', 'enabled'=>1, 'visible'=>1, 'position'=>20, 'notnull'=>1, 'index'=>1, 'searchall'=>1,),
@@ -102,6 +103,7 @@ class instrument extends CommonObject
 	public $tms;
 	public $fk_user_creat;
 	public $fk_user_modif;
+    public $fk_product;
 	public $import_key;
 	public $status;
 	public $serial;
@@ -185,6 +187,7 @@ class instrument extends CommonObject
 	 */
 	public function create(User $user, $notrigger = false)
 	{
+	    $this->fk_product = $_POST['product'];
         $category = $_POST['category'];
         $error = 0;
         global $conf;
@@ -202,11 +205,12 @@ class instrument extends CommonObject
             }
         }
 
-        $sql = "INSERT INTO llx_musical_instrument (ref,description,date_creation,fk_user_creat,status,serial,name,price) VALUES('"
+        $sql = "INSERT INTO llx_musical_instrument (ref,description,date_creation,fk_user_creat,fk_product,status,serial,name,price) VALUES('"
             .$this->ref."','"
             .$this->description."','"
             .$now ."','"
             .$user->id."','"
+            .$this->fk_product."','"
             .$this->status."','"
             .$this->serial."','"
             .$this->name."','"
@@ -665,6 +669,7 @@ class instrument extends CommonObject
             return 1;
         }
 	}
+
     public function deleteLinksCategory(User $user, $notrigger = false)
     {
         $error = 0;

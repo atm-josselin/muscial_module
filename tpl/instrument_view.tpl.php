@@ -47,8 +47,9 @@ foreach($object->fields as $key => $val)
 	$value=$object->$key;
 
 	if ($key == 'price'){
-        print'<tr><td class="titlefield"> Price </td><td>';
+        print'<tr><td class="titlefield">'.$langs->trans('Price').'</td><td>';
         print price($object->price);
+        print ' € HT';
         print '</td></tr>';
         continue;
     }
@@ -66,7 +67,6 @@ foreach($object->fields as $key => $val)
 	//print dol_escape_htmltag($object->$key, 1, 1);
 	print '</td>';
 	print '</tr>';
-
 	if (! empty($keyforbreak) && $key == $keyforbreak) break;						// key used for break on second column
 }
 

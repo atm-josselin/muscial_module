@@ -25,7 +25,7 @@
  */
 
 /**
- *	\file       htdocs/core/modules/propale/doc/pdf_musical_azur_mention.modules.php
+ *	\file       htdocs/core/modules/propale/doc/pdf_azur_mention.modules.php
  *	\ingroup    propale
  *	\brief      Fichier de la classe permettant de generer les propales au modele Azur
  */
@@ -39,7 +39,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/pdf.lib.php';
 /**
  *	Class to generate PDF proposal Azur
  */
-class pdf_musical_azur_mention extends ModelePDFPropales
+class pdf_azur_mention extends ModelePDFPropales
 {
 	/**
      * @var DoliDb Database handler
@@ -133,7 +133,7 @@ class pdf_musical_azur_mention extends ModelePDFPropales
 		$langs->loadLangs(array("main", "bills"));
 
 		$this->db = $db;
-		$this->name = "musical_azur_mention";
+		$this->name = "azur_mention";
 		$this->description = $langs->trans('DocModelAzurDescription');
 		$this->update_main_doc_field = 1;		// Save the name of generated file as the main doc when generating a doc with this template
 

@@ -60,5 +60,6 @@ Serial = Serial Number
 instrumentList = Instruments List
 instrumentNew = New Instrument
 price = Price
+ProductLinked = Origin product
 
 MUSICAL_DEFAULT_PRICE = Default price
