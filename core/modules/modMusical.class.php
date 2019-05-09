@@ -321,6 +321,13 @@ class modMusical extends DolibarrModules
 		include_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
 		$extrafields = new ExtraFields($this->db);
 
+        // -- Add extrafield to propals
+        $extra = new ExtraFields($this->db);
+        $result = $extra->addExtraField('mention','Mention Complémentaire','text','100','512','propale','1','0','','','1','','0','1','0','','0','1');
+        var_dump($result);
+        exit();
+        // --
+
 		//$result1=$extrafields->addExtraField('myattr1', "New Attr 1 label", 'boolean', 1,  3, 'thirdparty',   0, 0, '', '', 1, '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
 		//$result2=$extrafields->addExtraField('myattr2', "New Attr 2 label", 'varchar', 1, 10, 'project',      0, 0, '', '', 1, '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
 		//$result3=$extrafields->addExtraField('myattr3', "New Attr 3 label", 'varchar', 1, 10, 'bank_account', 0, 0, '', '', 1, '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
