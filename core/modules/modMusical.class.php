@@ -69,16 +69,14 @@ class modMusical extends DolibarrModules
 		$this->editor_url = 'None';
 
 		// Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
-		$this->version = '2.3.2';
+		$this->version = '3.0.0';
 
         //Url to the file with your last numberversion of this module
         //$this->url_last_version = 'http://www.example.com/versionmodule.txt';
 		// Key used in llx_const table to save module status enabled/disabled (where MUSICAL is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
 		// Name of image file used for this module.
-		// If file is in theme/yourtheme/img directory under name object_pictovalue.png, use this->picto='pictovalue'
-		// If file is in module/img directory under name object_pictovalue.png, use this->picto='pictovalue@module'
-		$this->picto='generic';
+		$this->picto='pictovalue@musical';
 
 		// Define some features supported by module (triggers, login, substitutions, menus, css, etc...)
 		$this->module_parts = array(
@@ -314,21 +312,19 @@ class modMusical extends DolibarrModules
 	 */
 	public function init($options='')
 	{
+	    global $conf, $db;
 		$result=$this->_load_tables('/musical/sql/');
 		if ($result < 0) return -1; // Do not activate module if not allowed errors found on module SQL queries (the _load_table run sql with run_sql with error allowed parameter to 'default')
 
 		// Create extrafields
 		include_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
-		$extrafields = new ExtraFields($this->db);
+		$extrafields = new ExtraFields($db);
 
         // -- Add extrafield to propals
-        $extra = new ExtraFields($this->db);
-        $result = $extra->addExtraField('mention','Mention Complémentaire','text','100','512','propale','1','0','','','1','','0','1','0','','0','1');
-        var_dump($result);
-        exit();
-        // --
+        $extra = new ExtraFields($db);
 
-		//$result1=$extrafields->addExtraField('myattr1', "New Attr 1 label", 'boolean', 1,  3, 'thirdparty',   0, 0, '', '', 1, '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
+		$result1=$extrafields->addExtraField('mentionAtt', "Mention(s) complémentaire(s)", 'text', 1,  1024, 'propal',   0, 0, '', '', 1, '', 1, 0, '', '', 'musical@musical', '$conf->musical->enabled');
+		//exit;
 		//$result2=$extrafields->addExtraField('myattr2', "New Attr 2 label", 'varchar', 1, 10, 'project',      0, 0, '', '', 1, '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
 		//$result3=$extrafields->addExtraField('myattr3', "New Attr 3 label", 'varchar', 1, 10, 'bank_account', 0, 0, '', '', 1, '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
 		//$result4=$extrafields->addExtraField('myattr4', "New Attr 4 label", 'select',  1,  3, 'thirdparty',   0, 1, '', array('options'=>array('code1'=>'Val1','code2'=>'Val2','code3'=>'Val3')), 1 '', 0, 0, '', '', 'musical@musical', '$conf->musical->enabled');
@@ -348,9 +344,10 @@ class modMusical extends DolibarrModules
 	 */
 	public function remove($options = '')
 	{
+        global $conf, $db;
 		$sql = array();
         //$sql=array("DELETE FROM ".MAIN_DB_PREFIX."document_model WHERE nom='azur_mention'");
-
+        $extra = new ExtraFields($db);
 		return $this->_remove($sql, $options);
 	}
 }
