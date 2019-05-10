@@ -87,7 +87,7 @@ class modMusical extends DolibarrModules
 			'theme' => 0,                                    	// Set this to 1 if module has its own theme directory (theme)
 		    'tpl' => 0,                                      	// Set this to 1 if module overwrite template dir (core/tpl)
 			'barcode' => 0,                                  	// Set this to 1 if module has its own barcode directory (core/modules/barcode)
-			'models' => 0,                                   	// Set this to 1 if module has its own models directory (core/modules/xxx)
+			'models' => 1,                                   	// Set this to 1 if module has its own models directory (core/modules/xxx)
 			'css' => array('/musical/css/musical.css.php'),	// Set this to relative path of css file if module has its own css file
 	 		'js' => array('/musical/js/musical.js.php'),          // Set this to relative path of js file if module must load a js on all pages
             'hooks' => array('productcard', 'propalcard'),  // Set here all hooks context you want to support
