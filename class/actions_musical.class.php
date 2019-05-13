@@ -94,10 +94,12 @@ class ActionsMusical
 	 */
 	public function addMoreActionsButtons($parameters, &$object, &$action, $hookmanager){
 	    if ($parameters['currentcontext'] == 'productcard'){
-            print '<div class="inline-block divButAction"><a class="butAction" ';
-            print 'href="/dolibarr/htdocs/custom/musical/instrument_card.php?action=create';
-            print '&ref='.$object->ref.'&price='.$object->price.'&description='.$object->description.'&name='.$object->label.'&status='.$object->status.'&product='.$object->id;
-            print '">Créer un instrument</a></div>';
+            print '<div class="inline-block divButAction">';
+            print '<form method="post" action="'.dol_buildpath('musical/instrument_card.php?action=create',2).'">';
+            print '<input type="hidden" name="ref" value="'.$object->ref.'">';
+            print '<input type="submit" class="butAction" value="Créer un instrument"/>';
+            print '</form>';
+            print '</div>';
             return 0;
         }
 	    return 0;

@@ -187,8 +187,15 @@ class instrument extends CommonObject
 	 */
 	public function create(User $user, $notrigger = false)
 	{
-	    $this->fk_product = $_POST['product'];
-        $category = $_POST['category'];
+	    if (isset($_POST['product'])){
+            $this->fk_product = $_POST['product'];
+        }
+        if (isset($_POST['category'])){
+            $category = $_POST['category'];
+        }
+        else {
+            $category = '0';
+        }
         $error = 0;
         global $conf;
         $now = $this->db->idate(date('y-m-j H:i:s'));
@@ -267,7 +274,12 @@ class instrument extends CommonObject
     public function insertCategory(User $user, $notrigger = false,$id){
         $error = 0;
         global $conf;
-        $category = $_POST['category'];
+        if (isset($_POST['category'])){
+            $category = $_POST['category'];
+        }
+        else {
+            $category = '0';
+        }
         $sql = "INSERT INTO llx_musical_instrument_category(fk_rowCategory, fk_rowInstrument) VALUES ('".$category."','".$id."');";
         $this->db->begin();
 
@@ -489,7 +501,12 @@ class instrument extends CommonObject
 
 	public function update(User $user, $notrigger = false)
 	{
-        $category = $_POST['category'];
+        if (isset($_POST['category'])){
+            $category = $_POST['category'];
+        }
+        else {
+            $category = '0';
+        }
 	    $res = $this->updateCategory($user, $notrigger);
         $now = $this->db->idate(date('j-m-y H:i:s'));
 	    if ($res != 1) return $res;
@@ -554,7 +571,13 @@ class instrument extends CommonObject
 	public function updateCategory(User $user, $notrigger = false){
         $error = 0;
         global $conf;
-        $category = $_POST['category'];
+        if (isset($_POST['category'])){
+            $category = $_POST['category'];
+        }
+        else {
+            $category = '0';
+        }
+
         $this->db->begin();
         // Check if there is already a catagory in the Database
         $currentCategory=$this->db->query("SELECT * FROM llx_musical_instrument_category WHERE fk_rowInstrument='".$this->id."';");

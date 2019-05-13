@@ -174,7 +174,7 @@ class modMusical extends DolibarrModules
             'tabfield'=>array("label,defaultPrice"),														                // List of fields (result of select to show dictionary)
             'tabfieldvalue'=>array("label,defaultPrice"),														                    // List of fields (list of fields to edit a record)
             'tabfieldinsert'=>array("label,defaultPrice"),														                // List of fields (list of fields for insert)
-            'tabrowid'=>array(rowid),																                                // Name of columns with primary key (try to always name it 'rowid')
+            'tabrowid'=>array('rowid'),																                                // Name of columns with primary key (try to always name it 'rowid')
             'tabcond'=>array($conf->musical->enabled)											                                	// Condition to show each dictionary
         );
 
