@@ -48,8 +48,7 @@ foreach($object->fields as $key => $val)
 
 	if ($key == 'price'){
         print'<tr><td class="titlefield">'.$langs->trans('Price').'</td><td>';
-        print price($object->price);
-        print ' € HT';
+        print price($object->price,'',1).' HT';
         print '</td></tr>';
         continue;
     }

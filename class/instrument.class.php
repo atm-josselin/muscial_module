@@ -201,7 +201,7 @@ class instrument extends CommonObject
         $now = $this->db->idate(date('y-m-j H:i:s'));
 
         // Auto Price if it's empty
-        if (((int)$this->price) == 0){
+        if (((float)$this->price) == 0){
             $currentCategory=$this->db->query("SELECT * FROM llx_c_musical_instrument_category WHERE rowid='".$category."';");
             // No price and no category
             if ($this->db->num_rows($currentCategory) == 0){
@@ -221,7 +221,7 @@ class instrument extends CommonObject
             .$this->status."','"
             .$this->serial."','"
             .$this->name."','"
-            .$this->price."');";
+            .price($this->price)."');";
         $this->db->begin();
 
         if (! $error)
@@ -515,7 +515,7 @@ class instrument extends CommonObject
         $this->db->begin();
 
         // Auto Price if it's empty
-        if (((int)$this->price) == 0){
+        if (((float)$this->price) == 0){
             $currentCategory=$this->db->query("SELECT * FROM llx_c_musical_instrument_category WHERE rowid='".$category."';");
             // No price and no category
             if ($this->db->num_rows($currentCategory) == 0){

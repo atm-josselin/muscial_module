@@ -97,6 +97,11 @@ class ActionsMusical
             print '<div class="inline-block divButAction">';
             print '<form method="post" action="'.dol_buildpath('musical/instrument_card.php?action=create',2).'">';
             print '<input type="hidden" name="ref" value="'.$object->ref.'">';
+            print '<input type="hidden" name="name" value="'.$object->label.'">';
+            print '<input type="hidden" name="price" value="'.price2num($object->price).'">';
+            print '<input type="hidden" name="description" value="'.$object->description.'">';
+            print '<input type="hidden" name="status" value="'.$object->status.'">';
+            print '<input type="hidden" name="product" value="'.$object->id.'">';
             print '<input type="submit" class="butAction" value="Créer un instrument"/>';
             print '</form>';
             print '</div>';
@@ -138,37 +143,6 @@ class ActionsMusical
 	        return -1;
 	    }
 	}
-
-
-	/**
-	 * Overloading the addMoreMassActions function : replacing the parent's function with the one below
-	 *
-	 * @param   array           $parameters     Hook metadatas (context, etc...)
-	 * @param   CommonObject    $object         The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
-	 * @param   string          $action         Current action (if set). Generally create or edit or null
-	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
-	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
-	 */
-	public function addMoreMassActions($parameters, &$object, &$action, $hookmanager)
-	{
-	    global $conf, $user, $langs;
-
-	    $error = 0; // Error counter
-
-        /* print_r($parameters); print_r($object); echo "action: " . $action; */
-	    if (in_array($parameters['currentcontext'], array('somecontext1','somecontext2')))		// do something only for the context 'somecontext1' or 'somecontext2'
-	    {
-	        $this->resprints = '<option value="0"'.($disabled?' disabled="disabled"':'').'>'.$langs->trans("MusicalMassAction").'</option>';
-	    }
-
-	    if (! $error) {
-	        return 0; // or return 1 to replace standard code
-	    } else {
-	        $this->errors[] = 'Error message';
-	        return -1;
-	    }
-	}
-
 
 
 	/**

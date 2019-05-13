@@ -421,28 +421,16 @@ class pdf_azur_mention extends ModelePDFPropales
 
                 // Affiche Mentions
                 $mention = $object->array_options['options_mentionAtt'];
-                $notetoshow=$mention;
-                if (! empty($conf->global->MAIN_ADD_SALE_REP_SIGNATURE_IN_NOTE))
-                {
-                    // Get first sale rep
-                    if (is_object($object->thirdparty))
-                    {
-                        $salereparray=$object->thirdparty->getSalesRepresentatives($user);
-                        $salerepobj=new User($this->db);
-                        $salerepobj->fetch($salereparray[0]['id']);
-                        if (! empty($salerepobj->signature)) $notetoshow=dol_concatdesc($notetoshow, $salerepobj->signature);
-                    }
-                }
-                if ($notetoshow)
+                if ($mention)
                 {
                     $tab_top -= 2;
 
                     $substitutionarray=pdf_getSubstitutionArray($outputlangs, null, $object);
                     complete_substitutions_array($substitutionarray, $outputlangs, $object);
-                    $notetoshow = make_substitutions($notetoshow, $substitutionarray, $outputlangs);
+                    $notetoshow = make_substitutions($mention, $substitutionarray, $outputlangs);
 
                     $pdf->SetFont('','', $default_font_size - 1);
-                    $pdf->writeHTMLCell(190, 3, $this->posxdesc-1, $tab_top-1, dol_htmlentitiesbr($notetoshow), 0, 1);
+                    $pdf->writeHTMLCell(190, 3, $this->posxdesc-1, $tab_top-1, dol_htmlentitiesbr($mention), 0, 1);
                     $nexY = $pdf->GetY();
                     $height_note=$nexY-$tab_top;
 
@@ -453,6 +441,9 @@ class pdf_azur_mention extends ModelePDFPropales
                     $tab_top = $nexY+6;
                 }
 
+                $iniY = $tab_top + 5;
+                $curY = $tab_top + 5;
+                $nexY = $tab_top + 5;
 
 				// Affiche notes
 				$notetoshow=empty($object->note_public)?'':$object->note_public;

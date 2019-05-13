@@ -74,7 +74,7 @@ $cancel     = GETPOST('cancel', 'aZ09');
 $contextpage= GETPOST('contextpage','aZ')?GETPOST('contextpage','aZ'):'instrumentcard';   // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 $category   = GETPOST('category', 'alpha');
-$product  = GETPOST('product', 'int');
+$product    = GETPOST('product', 'int');
 // Initialize technical objects
 $object=new instrument($db);
 $extrafields = new ExtraFields($db);
