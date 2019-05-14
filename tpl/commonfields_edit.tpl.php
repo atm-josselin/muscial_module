@@ -8,7 +8,6 @@ foreach($object->fields as $key => $val)
     if (abs($val['visible']) != 1) continue;
 
     if (array_key_exists('enabled', $val) && isset($val['enabled']) && ! verifCond($val['enabled'])) continue;	// We don't want this field
-
     if ($key == 'serial') {
         print '<tr><td class="fieldrequired">';
         if (! empty($val['help'])) print $form->textwithpicto($langs->trans($val['label']), $val['help']);
@@ -37,7 +36,7 @@ foreach($object->fields as $key => $val)
 }
 
 // --- Champ catégorie
-print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired">'.$langs->trans('Category').'</td> ';
+print '<tr id="field_category"> <td class="titlefieldcreate">'.$langs->trans('Category').'</td> ';
 $currentObj=$db->query("Select * from ".MAIN_DB_PREFIX."musical_instrument_category where fk_rowInstrument='".$id."'");
 $currentCateg = $db->fetch_object($currentObj);
 $resql=$db->query("Select * from ".MAIN_DB_PREFIX."c_musical_instrument_category WHERE active = '1'");

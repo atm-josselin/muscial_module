@@ -74,7 +74,7 @@ $cancel     = GETPOST('cancel', 'aZ09');
 $contextpage= GETPOST('contextpage','aZ')?GETPOST('contextpage','aZ'):'instrumentcard';   // To manage different context of search
 $backtopage = GETPOST('backtopage', 'alpha');
 $category   = GETPOST('category', 'alpha');
-$product    = GETPOST('product', 'int');
+$fk_product    = GETPOST('fk_product', 'int');
 // Initialize technical objects
 $object=new instrument($db);
 $extrafields = new ExtraFields($db);
@@ -96,7 +96,7 @@ if (empty($action) && empty($id) && empty($ref)) $action='view';
 
 // Load object
 include DOL_DOCUMENT_ROOT.'/core/actions_fetchobject.inc.php';  // Must be include, not include_once  // Must be include, not include_once. Include fetch and fetch_thirdparty but not fetch_optionals
-
+require_once DOL_DOCUMENT_ROOT.'/product/class/product.class.php';
 // Security check - Protection if external user
 //if ($user->societe_id > 0) access_forbidden();
 //if ($user->societe_id > 0) $socid = $user->societe_id;
@@ -165,7 +165,11 @@ if ($action == 'create')
 	print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 	print '<input type="hidden" name="action" value="add">';
 	print '<input type="hidden" name="backtopage" value="'.$backtopage.'">';
-    print '<input type="hidden" name="product" value="'.$product.'">';
+    print '<input type="hidden" name="fk_product" value="'.$fk_product.'">';
+    if ($fk_product > 0){
+        $product = new Product($db);
+        $product->fetch($fk_product);
+    }
 
 	dol_fiche_head(array(), '');
 

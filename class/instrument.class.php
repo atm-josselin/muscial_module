@@ -191,6 +191,9 @@ class instrument extends CommonObject
 	    if (isset($_POST['product'])){
             $this->fk_product = $_POST['product'];
         }
+	    else {
+	        $this->fk_product = 0;
+        }
         if (isset($_POST['category'])){
             $category = $_POST['category'];
         }
@@ -206,7 +209,12 @@ class instrument extends CommonObject
             $currentCategory=$this->db->query("SELECT * FROM ".MAIN_DB_PREFIX."c_musical_instrument_category WHERE rowid='".$category."';");
             // No price and no category
             if ($this->db->num_rows($currentCategory) == 0){
-                $this->price = price2num($conf->global->MUSICAL_DEFAULT_PRICE);
+                if ($conf->global->MUSICAL_DEFAULT_PRICE != ''){
+                    $this->price = price2num($conf->global->MUSICAL_DEFAULT_PRICE);
+                }
+                else {
+                    $this->price = '0';
+                }
             }
             else {
                 $this->price = price2num($this->db->fetch_object($currentCategory)->defaultPrice);
@@ -520,7 +528,12 @@ class instrument extends CommonObject
             $currentCategory=$this->db->query("SELECT * FROM ".MAIN_DB_PREFIX."c_musical_instrument_category WHERE rowid='".$category."';");
             // No price and no category
             if ($this->db->num_rows($currentCategory) == 0){
-                $this->price = price2num($conf->global->MUSICAL_DEFAULT_PRICE);
+                if ($conf->global->MUSICAL_DEFAULT_PRICE != ''){
+                    $this->price = price2num($conf->global->MUSICAL_DEFAULT_PRICE);
+                }
+                else {
+                    $this->price = '0';
+                }
             }
             else {
                 $this->price = price2num($this->db->fetch_object($currentCategory)->defaultPrice);

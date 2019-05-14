@@ -38,6 +38,9 @@ $object->fields = dol_sort_array($object->fields, 'position');
 
 foreach($object->fields as $key => $val)
 {
+	if ($key == 'name'){
+		continue;
+	}
 	// Discard if extrafield is a hidden field on form
 	if (abs($val['visible']) != 1) continue;
 

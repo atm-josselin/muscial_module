@@ -23,6 +23,8 @@
  * $keyforbreak may be defined to key to switch on second column
  */
 
+require_once DOL_DOCUMENT_ROOT . "/product/class/product.class.php";
+
 // Protection to avoid direct call of template
 if (empty($conf) || ! is_object($conf))
 {
@@ -49,11 +51,10 @@ print '</td></tr>';
 
 // *** Lien Produit
 if ($object->fk_product > 0){
-
-    $currentObj=$db->query("Select * from ".MAIN_DB_PREFIX."product WHERE rowid='".$object->fk_product."'");
-    $currentProd = $db->fetch_object($currentObj);
+    $prod = new Product($db);
+    $prod->fetch($object->fk_product);
     print '<tr> <td class="titlefieldcreate"> '.$langs->trans('ProductLinked').' </td><td>';
-    print '<a href ="http://localhost/dolibarr/htdocs/product/card.php?id='.$object->fk_product.'">'.$currentProd->label.' ('. $currentProd->ref .') </a>';
+    print $prod->getNomUrl(1,1,20,-1);
     print '</td></tr>';
 }
 // ***

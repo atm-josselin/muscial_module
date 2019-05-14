@@ -101,7 +101,7 @@ class ActionsMusical
             print '<input type="hidden" name="price" value="'.price2num($object->price).'">';
             print '<input type="hidden" name="description" value="'.$object->description.'">';
             print '<input type="hidden" name="status" value="'.$object->status.'">';
-            print '<input type="hidden" name="product" value="'.$object->id.'">';
+            print '<input type="hidden" name="fk_product" value="'.$object->id.'">';
             print '<input type="submit" class="butAction" value="Créer un instrument"/>';
             print '</form>';
             print '</div>';
