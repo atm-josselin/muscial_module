@@ -105,7 +105,7 @@ class InterfaceMusicalTriggers extends DolibarrTriggers
 
             case 'PRODUCT_DELETE': // If a product is deleted, we need to delete the links with instruments too
                 $error = 0;
-                $sql = 'SELECT * FROM ".MAIN_DB_PREFIX."musical_instrument WHERE fk_product=' . $object->id;
+                $sql = "SELECT * FROM ".MAIN_DB_PREFIX."musical_instrument WHERE fk_product=" . $object->id;
                 $resql = $this->db->query($sql);
                 if ($resql) {
                     $num = $this->db->num_rows($resql);

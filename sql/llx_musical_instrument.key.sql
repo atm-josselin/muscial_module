@@ -22,7 +22,7 @@ ALTER TABLE llx_musical_instrument ADD INDEX idx_musical_instrument_status (stat
 ALTER TABLE llx_musical_instrument ADD INDEX idx_musical_instrument_serial (serial);
 -- END MODULEBUILDER INDEXES
 
---ALTER TABLE llx_musical_instrument ADD UNIQUE INDEX uk_musical_instrument_fieldxy(fieldx, fieldy);
+ALTER TABLE llx_musical_instrument ADD UNIQUE INDEX uk_musical_instrument_fieldxy(fieldx, fieldy);
 
---ALTER TABLE llx_musical_instrument ADD CONSTRAINT llx_musical_instrument_fk_field FOREIGN KEY (fk_field) REFERENCES llx_musical_myotherobject(rowid);
+ALTER TABLE llx_musical_instrument ADD CONSTRAINT llx_musical_instrument_fk_field FOREIGN KEY (fk_field) REFERENCES llx_musical_myotherobject(rowid);
 
