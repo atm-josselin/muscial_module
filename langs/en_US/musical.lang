@@ -63,3 +63,7 @@ price = Price
 ProductLinked = Origin product
 
 MUSICAL_DEFAULT_PRICE = Default price
+
+DeleteAllText = Delete all for a clean install (warning) :
+
+DeleteAll = Delete all

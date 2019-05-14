@@ -59,3 +59,11 @@ price = Prix
 ProductLinked = Produit d'origine
 
 MUSICAL_DEFAULT_PRICE = Prix par défaut (lorsque aucune catégorie n'est sélectionnée)
+
+DeleteAllText = Supprimer pour une nouvelle installation (Irréversible) :
+
+DeleteAll = Supprimer tout
+
+DeleteAllQ = Tous supprimer ?
+
+DeleteAllTextQ = Etes vous sûr de vouloir supprimer toutes les bases de données reliées au module ?

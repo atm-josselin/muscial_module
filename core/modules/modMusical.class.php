@@ -347,7 +347,40 @@ class modMusical extends DolibarrModules
         global $conf, $db;
 		$sql = array();
         //$sql=array("DELETE FROM ".MAIN_DB_PREFIX."document_model WHERE nom='azur_mention'");
-        $extra = new ExtraFields($db);
 		return $this->_remove($sql, $options);
 	}
+
+    /**
+     *	Function called for a clean install.
+     *	@return     int             	1 if OK, 0 if KO
+     */
+    public function cleanInstall()
+    {
+        global $conf, $db;
+        $this->removeAll();
+        return $this->init();
+    }
+
+    /**
+     *	Function called to remove all databases relied to the module
+     *	@param      string	$options    Options when enabling module ('', 'noboxes')
+     *	@return     int             	0 if OK, >0 if KO
+     */
+    public function removeAll($options = '')
+    {
+        global $db;
+        $res = 0;
+        $sql=array(
+            "DROP TABLE ".MAIN_DB_PREFIX."musical_instrument_category",
+            "DROP TABLE ".MAIN_DB_PREFIX."musical_instrument_extrafields",
+            "DROP TABLE ".MAIN_DB_PREFIX."musical_instrument",
+            "DROP TABLE ".MAIN_DB_PREFIX."c_musical_instrument_category"
+        );
+        foreach ($sql as $request){
+            $db->begin();
+            $db->query($request);
+            $res .= $db->commit();
+        }
+        return $res;
+    }
 }

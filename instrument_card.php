@@ -118,6 +118,7 @@ if (empty($reshook))
 
 	$permissiontoadd = $user->rights->musical->write;
 	$permissiontodelete = $user->rights->musical->delete || ($permissiontoadd && $object->status == 0);
+    $backurlforlist = dol_buildpath('/musical/instrument_list.php',1);
 	if ($id){
         $backtopage = dol_buildpath('/musical/instrument_card.php?action=&id=',1).$id;
     }

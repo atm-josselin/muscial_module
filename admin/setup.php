@@ -42,6 +42,8 @@ global $langs, $user;
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once DOL_DOCUMENT_ROOT . "/core/actions_setmoduleoptions.inc.php";
 
+require_once DOL_DOCUMENT_ROOT . "/custom/musical/core/modules/modMusical.class.php";
+
 // Translations
 $langs->loadLangs(array("admin", "musical@musical"));
 
@@ -60,9 +62,21 @@ $arrayofparameters=array(
 /*
  * Actions
  */
+
 if ((float) DOL_VERSION >= 6)
 {
 	include DOL_DOCUMENT_ROOT.'/core/actions_setmoduleoptions.inc.php';
+}
+
+if (isset($_POST['confirm'])){
+    $answer = $_POST['confirm'];
+    if ($answer == 'yes'){
+        $mod = new modMusical($db);
+        $res = $mod->cleanInstall();
+    }
+    else {
+        header('Location:'.$_SERVER["PHP_SELF"].'?action=');
+    }
 }
 
 
@@ -103,37 +117,60 @@ if ($action == 'edit')
 	print '</table>';
 
 	print '<br><div class="center">';
-	print '<input class="button" type="submit" value="'.$langs->trans("Save").'">';
+	print '<input class="butAction" type="submit" value="'.$langs->trans("Save").'">';
 	print '</div>';
 
 	print '</form>';
-	print '<br>';
 }
+
 else
 {
-	if (! empty($arrayofparameters))
-	{
-		print '<table class="noborder" width="100%">';
-		print '<tr class="liste_titre"><td class="titlefield">'.$langs->trans("Parameter").'</td><td>'.$langs->trans("Value").'</td></tr>';
+    if ($action == 'deleteAll'){
+        print '<form method="POST" action='.$_SERVER["PHP_SELF"].'>';
+        print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+        print '<table width="100%" class="valid"><tbody><tr class="validtitre"><td class="validtitre" colspan="3">';
+        print '<img src="/dolibarr/htdocs/theme/eldy/img/recent.png" alt="" class="inline-block">';
+        print $langs->trans("DeleteAllQ");
+        print '</td></tr>';
+        print '<tr class="valid"><td class="valid">';
+        print $langs->trans('DeleteAllTextQ');
+        print '</td><td class="valid">
+        <select class="flat width75" id="confirm" name="confirm">
+            <option value="yes">Oui</option>
+            <option value="no" selected="">Non</option>
+        </select>';
+        print '</td><td class="valid" align="center"><input class="button valignmiddle" type="submit" value="Valider"></td></tr> </tbody></table>';
+        print '</form>';
+    }
+    else {
+        if (!empty($arrayofparameters)) {
+            print '<table class="noborder" width="100%">';
+            print '<tr class="liste_titre"><td class="titlefield">' . $langs->trans("Parameter") . '</td><td>' . $langs->trans("Value") . '</td></tr>';
 
-		foreach($arrayofparameters as $key => $val)
-		{
-			print '<tr class="oddeven"><td>';
-			print $form->textwithpicto($langs->trans($key),$langs->trans($key));
-			print '</td><td>' . $conf->global->$key . '</td></tr>';
-		}
+            foreach ($arrayofparameters as $key => $val) {
+                print '<tr class="oddeven"><td>';
+                print $form->textwithpicto($langs->trans($key), $langs->trans($key));
+                print '</td><td>' . $conf->global->$key . '</td></tr>';
+            }
 
-		print '</table>';
+            print '</table>';
 
-		print '<div class="tabsAction">';
-		print '<a class="butAction" href="'.$_SERVER["PHP_SELF"].'?action=edit">'.$langs->trans("Modify").'</a>';
-		print '</div>';
-	}
-	else
-	{
-		print '<br>'.$langs->trans("NothingToSetup");
-	}
+            print '<div class="tabsAction">';
+            print '<a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?action=edit">' . $langs->trans("Modify") . '</a>';
+            print '</div>';
+        } else {
+            print '<br>' . $langs->trans("NothingToSetup");
+        }
+        print '<br/><br/><br/>';
+        print '<div class="tabsAction">';
+        print '<p>'.$langs->trans("DeleteAllText").'</p> <a class="butAction" href="'.$_SERVER["PHP_SELF"].'?action=deleteAll">'.$langs->trans("DeleteAll").'</a>';
+        print '</div>';
+        print '<br/><br/><br/>';
+    }
+
 }
+
+
 
 
 // Page end
