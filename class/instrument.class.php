@@ -187,6 +187,7 @@ class instrument extends CommonObject
 	 */
 	public function create(User $user, $notrigger = false)
 	{
+
 	    if (isset($_POST['product'])){
             $this->fk_product = $_POST['product'];
         }
@@ -202,17 +203,17 @@ class instrument extends CommonObject
 
         // Auto Price if it's empty
         if (((float)$this->price) == 0){
-            $currentCategory=$this->db->query("SELECT * FROM llx_c_musical_instrument_category WHERE rowid='".$category."';");
+            $currentCategory=$this->db->query("SELECT * FROM ".MAIN_DB_PREFIX."c_musical_instrument_category WHERE rowid='".$category."';");
             // No price and no category
             if ($this->db->num_rows($currentCategory) == 0){
-                $this->price = $conf->global->MUSICAL_DEFAULT_PRICE;
+                $this->price = price2num($conf->global->MUSICAL_DEFAULT_PRICE);
             }
             else {
-                $this->price = $this->db->fetch_object($currentCategory)->defaultPrice;
+                $this->price = price2num($this->db->fetch_object($currentCategory)->defaultPrice);
             }
         }
 
-        $sql = "INSERT INTO llx_musical_instrument (ref,description,date_creation,fk_user_creat,fk_product,status,serial,name,price) VALUES('"
+        $sql = "INSERT INTO ".MAIN_DB_PREFIX."musical_instrument (ref,description,date_creation,fk_user_creat,fk_product,status,serial,name,price) VALUES('"
             .$this->ref."','"
             .$this->description."','"
             .$now ."','"
@@ -221,7 +222,7 @@ class instrument extends CommonObject
             .$this->status."','"
             .$this->serial."','"
             .$this->name."','"
-            .price($this->price)."');";
+            .price2num($this->price)."');";
         $this->db->begin();
 
         if (! $error)
@@ -280,7 +281,7 @@ class instrument extends CommonObject
         else {
             $category = '0';
         }
-        $sql = "INSERT INTO llx_musical_instrument_category(fk_rowCategory, fk_rowInstrument) VALUES ('".$category."','".$id."');";
+        $sql = "INSERT INTO ".MAIN_DB_PREFIX."musical_instrument_category(fk_rowCategory, fk_rowInstrument) VALUES ('".$category."','".$id."');";
         $this->db->begin();
 
         if (! $error)
@@ -515,18 +516,24 @@ class instrument extends CommonObject
         $this->db->begin();
 
         // Auto Price if it's empty
-        if (((float)$this->price) == 0){
-            $currentCategory=$this->db->query("SELECT * FROM llx_c_musical_instrument_category WHERE rowid='".$category."';");
+        if (price2num($this->price) == 0){
+            $currentCategory=$this->db->query("SELECT * FROM ".MAIN_DB_PREFIX."c_musical_instrument_category WHERE rowid='".$category."';");
             // No price and no category
             if ($this->db->num_rows($currentCategory) == 0){
-                $this->price = $conf->global->MUSICAL_DEFAULT_PRICE;
+                $this->price = price2num($conf->global->MUSICAL_DEFAULT_PRICE);
             }
             else {
-                $this->price = $this->db->fetch_object($currentCategory)->defaultPrice;
+                $this->price = price2num($this->db->fetch_object($currentCategory)->defaultPrice);
             }
         }
 
-        $sql = "UPDATE llx_musical_instrument SET tms='".$now."', fk_user_modif='". $user->id ."', ref='".$this->ref."', description='".$this->description."', status='".$this->status."', serial ='".$this->serial."', name='".$this->name."', price='".$this->price."' WHERE rowid='".$this->id."';";
+
+        // Solve problems with the price
+        $this->price = str_replace(' ','',$this->price);
+        $this->price = str_replace(',','.',$this->price);
+        // ---
+
+        $sql = "UPDATE ".MAIN_DB_PREFIX."musical_instrument SET tms='".$now."', fk_user_modif='". $user->id ."', ref='".$this->ref."', description='".$this->description."', status='".$this->status."', serial ='".$this->serial."', name='".$this->name."', price='".price2num($this->price)."' WHERE rowid='".$this->id."';";
 
         if (! $error)
         {
@@ -580,7 +587,7 @@ class instrument extends CommonObject
 
         $this->db->begin();
         // Check if there is already a catagory in the Database
-        $currentCategory=$this->db->query("SELECT * FROM llx_musical_instrument_category WHERE fk_rowInstrument='".$this->id."';");
+        $currentCategory=$this->db->query("SELECT * FROM ".MAIN_DB_PREFIX."musical_instrument_category WHERE fk_rowInstrument='".$this->id."';");
         $checkCategory = $this->db->num_rows($currentCategory);
         // 1 -> yes 0 -> no
         if($checkCategory == 0){ //There is no category with this instrument
@@ -589,15 +596,15 @@ class instrument extends CommonObject
                 return 1;
             }
             else { // We want to add a category
-                $sql = "INSERT INTO llx_musical_instrument_category(fk_rowCategory, fk_rowInstrument) VALUES ('".$category."','".$this->id."');";
+                $sql = "INSERT INTO ".MAIN_DB_PREFIX."musical_instrument_category(fk_rowCategory, fk_rowInstrument) VALUES ('".$category."','".$this->id."');";
             }
         }
         else { // There is a category in the database
             if ($category == 0){ // We want to remove the category
-                $sql = "DELETE FROM llx_musical_instrument_category WHERE fk_rowInstrument='".$this->id."';";
+                $sql = "DELETE FROM ".MAIN_DB_PREFIX."musical_instrument_category WHERE fk_rowInstrument='".$this->id."';";
             }
             else { // We want to change the category
-                $sql = "UPDATE llx_musical_instrument_category SET fk_rowCategory='".$category."' WHERE fk_rowInstrument='".$this->id."';";
+                $sql = "UPDATE ".MAIN_DB_PREFIX."musical_instrument_category SET fk_rowCategory='".$category."' WHERE fk_rowInstrument='".$this->id."';";
             }
         }
 
@@ -651,7 +658,7 @@ class instrument extends CommonObject
 	    $res = $this->deleteLinksCategory($user, $notrigger);
         $error = 0;
         global $conf;
-        $sql = "DELETE FROM llx_musical_instrument WHERE rowid='".$this->id."'";
+        $sql = "DELETE FROM ".MAIN_DB_PREFIX."musical_instrument WHERE rowid='".$this->id."'";
         $this->db->begin();
 
         if (! $error)
@@ -697,7 +704,7 @@ class instrument extends CommonObject
     {
         $error = 0;
         global $conf;
-        $sql = "DELETE FROM llx_musical_instrument_category WHERE fk_rowInstrument='".$this->id."'";
+        $sql = "DELETE FROM ".MAIN_DB_PREFIX."musical_instrument_category WHERE fk_rowInstrument='".$this->id."'";
         $this->db->begin();
 
         if (! $error)

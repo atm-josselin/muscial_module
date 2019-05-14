@@ -118,11 +118,14 @@ if (empty($reshook))
 
 	$permissiontoadd = $user->rights->musical->write;
 	$permissiontodelete = $user->rights->musical->delete || ($permissiontoadd && $object->status == 0);
-    	$backurlforlist = dol_buildpath('/musical/instrument_card.php?id=__ID__',1);
-	if (empty($backtopage)) {
-	    if (empty($id)) $backtopage = $backurlforlist;
-	    else $backtopage = dol_buildpath('/musical/instrument_card.php?id=',1).($id > 0 ? $id : '__ID__');
-    	}
+	if ($id){
+        $backtopage = dol_buildpath('/musical/instrument_card.php?action=&id=',1).$id;
+    }
+	else {
+        $backtopage = dol_buildpath('/musical/instrument_card.php?action=&id=',1).($id > 0 ? $id : '__ID__');
+    }
+
+
 	$triggermodname = 'MUSICAL_INSTRUMENT_MODIFY';	// Name of trigger action code to execute when we modify record
 
 	// Actions cancel, add, update, delete or clone
@@ -176,7 +179,7 @@ if ($action == 'create')
 
 	// --- Champ catégorie
     print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired"> '.$langs->trans('Category').' </td> ';
-    $resql=$db->query("Select * from llx_c_musical_instrument_category WHERE active = '1'");
+    $resql=$db->query("Select * from ".MAIN_DB_PREFIX."c_musical_instrument_category WHERE active = '1'");
     if ($resql->num_rows > 1)
     {
         $num = $db->num_rows($resql);
@@ -208,7 +211,7 @@ if ($action == 'create')
 	print '<div class="center">';
 	print '<input type="submit" class="button" name="add" value="'.dol_escape_htmltag($langs->trans("Create")).'">';
 	print '&nbsp; ';
-	print '<input type="'.($backtopage?"submit":"button").'" class="button" name="cancel" value="'.dol_escape_htmltag($langs->trans("Cancel")).'"'.($backtopage?'':' onclick="javascript:history.go(-1)"').'>';	// Cancel for create does not post form if we don't know the backtopage
+    print '<input type="hidden" name="backtopage" value="'.$backtopage.'">';
 	print '</div>';
 
 	print '</form>';
@@ -236,9 +239,9 @@ if (($id || $ref) && $action == 'edit')
 
     // --- Champ catégorie
     print '<tr id="field_category"> <td class="titlefieldcreate fieldrequired">'.$langs->trans('Category').'</td> ';
-    $currentObj=$db->query("Select * from llx_musical_instrument_category where fk_rowInstrument='".$id."'");
+    $currentObj=$db->query("Select * from ".MAIN_DB_PREFIX."musical_instrument_category where fk_rowInstrument='".$id."'");
     $currentCateg = $db->fetch_object($currentObj);
-    $resql=$db->query("Select * from llx_c_musical_instrument_category WHERE active = '1'");
+    $resql=$db->query("Select * from ".MAIN_DB_PREFIX."c_musical_instrument_category WHERE active = '1'");
     if ($resql->num_rows > 1)
     {
         $num = $db->num_rows($resql);

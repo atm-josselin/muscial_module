@@ -37,7 +37,7 @@ $object->fields = dol_sort_array($object->fields, 'position');
 print '<table class="border centpercent">';
 
 // --- Champ catégorie
-$currentObj=$db->query("Select * from llx_c_musical_instrument_category INNER JOIN llx_musical_instrument_category ON rowid=fk_rowCategory where fk_rowInstrument='".$id."'");
+$currentObj=$db->query("Select * from ".MAIN_DB_PREFIX."c_musical_instrument_category INNER JOIN ".MAIN_DB_PREFIX."musical_instrument_category ON rowid=fk_rowCategory where fk_rowInstrument='".$id."'");
 $currentCateg = $db->fetch_object($currentObj);
 print '<tr> <td class="titlefieldcreate"> '.$langs->trans('Category').' </td><td>';
 if ($currentCateg)
@@ -48,9 +48,10 @@ print '</td></tr>';
 // ---
 
 // *** Lien Produit
-$currentObj=$db->query("Select * from llx_product WHERE rowid='".$object->fk_product."'");
-$currentProd = $db->fetch_object($currentObj);
 if ($object->fk_product > 0){
+
+    $currentObj=$db->query("Select * from ".MAIN_DB_PREFIX."product WHERE rowid='".$object->fk_product."'");
+    $currentProd = $db->fetch_object($currentObj);
     print '<tr> <td class="titlefieldcreate"> '.$langs->trans('ProductLinked').' </td><td>';
     print '<a href ="http://localhost/dolibarr/htdocs/product/card.php?id='.$object->fk_product.'">'.$currentProd->label.' ('. $currentProd->ref .') </a>';
     print '</td></tr>';

@@ -13,8 +13,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-INSERT INTO llx_c_musical_instrument_category(label,defaultPrice,active) VALUES
-('Cuivre','280',1),
-('Bois','360',1),
-('Percussion','4562',1),
-('Corde','1654',1);
+INSERT INTO llx_c_musical_instrument_category(rowid,label,defaultPrice,active) VALUES
+(1,'Cuivre','280',1),
+(2,'Bois','360',1),
+(3,'Percussion','4562',1),
+(4,'Corde','1654',1),
+(5,'Clavier','10589.85',1);

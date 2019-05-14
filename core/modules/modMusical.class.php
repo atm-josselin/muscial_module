@@ -69,7 +69,7 @@ class modMusical extends DolibarrModules
 		$this->editor_url = 'None';
 
 		// Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
-		$this->version = '3.0.0';
+		$this->version = '1.0.0';
 
         //Url to the file with your last numberversion of this module
         //$this->url_last_version = 'http://www.example.com/versionmodule.txt';
@@ -171,9 +171,9 @@ class modMusical extends DolibarrModules
             'tablib'=>array("Catégories Instruments"),						                                                        // Label of tables
             'tabsql'=>array('SELECT label, defaultPrice, rowid, active FROM '.MAIN_DB_PREFIX.'c_musical_instrument_category'),      // Request to select fields
             'tabsqlsort'=>array("label ASC"),														                                // Sort order
-            'tabfield'=>array("label,defaultPrice"),														                // List of fields (result of select to show dictionary)
+            'tabfield'=>array("label,defaultPrice"),														                        // List of fields (result of select to show dictionary)
             'tabfieldvalue'=>array("label,defaultPrice"),														                    // List of fields (list of fields to edit a record)
-            'tabfieldinsert'=>array("label,defaultPrice"),														                // List of fields (list of fields for insert)
+            'tabfieldinsert'=>array("label,defaultPrice"),														                    // List of fields (list of fields for insert)
             'tabrowid'=>array('rowid'),																                                // Name of columns with primary key (try to always name it 'rowid')
             'tabcond'=>array($conf->musical->enabled)											                                	// Condition to show each dictionary
         );
