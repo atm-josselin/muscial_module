@@ -159,24 +159,20 @@ llxHeader('','instrument','');
 // Part to create
 if ($action == 'create')
 {
-	print load_fiche_titre($langs->trans("NewObject", $langs->transnoentitiesnoconv("instrument")));
+    print load_fiche_titre($langs->trans("NewObject", $langs->transnoentitiesnoconv("instrument")));
 
 	print '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
 	print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 	print '<input type="hidden" name="action" value="add">';
 	print '<input type="hidden" name="backtopage" value="'.$backtopage.'">';
     print '<input type="hidden" name="fk_product" value="'.$fk_product.'">';
-    if ($fk_product > 0){
-        $product = new Product($db);
-        $product->fetch($fk_product);
-    }
 
 	dol_fiche_head(array(), '');
 
 	print '<table class="border centpercent">'."\n";
 
 	// Common attributes
-	include DOL_DOCUMENT_ROOT . '/core/tpl/commonfields_add.tpl.php';
+	include DOL_DOCUMENT_ROOT . '/custom/musical/tpl/commonfields_add.tpl.php';
 
 	// Other attributes
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_add.tpl.php';

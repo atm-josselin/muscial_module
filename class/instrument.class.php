@@ -187,12 +187,13 @@ class instrument extends CommonObject
 	 */
 	public function create(User $user, $notrigger = false)
 	{
-
 	    if (isset($_POST['product'])){
             $this->fk_product = $_POST['product'];
         }
 	    else {
-	        $this->fk_product = 0;
+	        if ($this->fk_product < 0){
+                $this->fk_product = 0;
+            }
         }
         if (isset($_POST['category'])){
             $category = $_POST['category'];

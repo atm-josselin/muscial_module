@@ -95,15 +95,13 @@ class ActionsMusical
 	public function addMoreActionsButtons($parameters, &$object, &$action, $hookmanager){
 	    if ($parameters['currentcontext'] == 'productcard'){
             print '<div class="inline-block divButAction">';
-            print '<form method="post" action="'.dol_buildpath('musical/instrument_card.php?action=create',2).'">';
-            print '<input type="hidden" name="ref" value="'.$object->ref.'">';
+            print '<a href="'.dol_buildpath('musical/instrument_card.php?action=create',2).'&fk_product='.$object->id.'" class="butAction">';
+           /* print '<input type="hidden" name="ref" value="'.$object->ref.'">';
             print '<input type="hidden" name="name" value="'.$object->label.'">';
             print '<input type="hidden" name="price" value="'.price2num($object->price).'">';
             print '<input type="hidden" name="description" value="'.$object->description.'">';
-            print '<input type="hidden" name="status" value="'.$object->status.'">';
-            print '<input type="hidden" name="fk_product" value="'.$object->id.'">';
-            print '<input type="submit" class="butAction" value="Créer un instrument"/>';
-            print '</form>';
+            print '<input type="hidden" name="status" value="'.$object->status.'">';*/
+            print 'Créer un instrument </a>';
             print '</div>';
             return 0;
         }
